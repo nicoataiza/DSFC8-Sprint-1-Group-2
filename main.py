@@ -30,9 +30,9 @@ list_of_pages = [
     "References"
 ]
 
-#NTS => beta columns = css.flexbox
+#NTS => beta columns = css.flexbox/css.grid
 def project():
-    #First page detailing project details
+    #1st page - Project details
     st.title("You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability")
     st.subheader('by Data Science Fellowship Cohort 9 - Group 2')
     st.write('Adrian, Bono, Grace, MaCris, Nico, Sofia (mentored by Aaron)')
@@ -56,7 +56,7 @@ def project():
     """
 
 def background():
-    #Second Page Detailing Background of Study and Research Questions
+    #2nd page - Background of Study and Research Questions
     st.title('Background and Objective')
     st.markdown(
        "With the upcoming 2022 elections, our group wanted to review past election data and determine what did the \
@@ -85,3 +85,13 @@ def background():
         )
     with col2:
         st.image(sdg4_image, caption='Source: Think Sustainability')
+
+def data_method():
+    #3rd page - Data Sources and Methodology
+    st.title('Data Sources and Methodology')
+    st.write("")
+    data_sources = Image.open("assets/Data_source.JPG")
+    st.image(data_sources)
+    st.write("")
+    methodology = Image.open("assets/Methodology.JPG")
+    st.image(methodology)
