@@ -98,3 +98,21 @@ def data_method():
     st.write("")
     methodology = Image.open("assets/Methodology.JPG")
     st.image(methodology)
+    
+def win_loss():
+    # 4th page - Winners vs Losers
+    # we can do yung select box thingy + multiple ifs para isang page nalang expenditures saka socmed
+    pass
+
+def profile():
+    # 5th page - Voter profiling
+    # same as above, para yung kmeans saka geospatial plot isang page nalang din
+    pass
+
+def conclusions():
+    # 6th page - Conclusions and recommendations
+    pass
+
+def references():
+    # 7th page - References
+    pass
