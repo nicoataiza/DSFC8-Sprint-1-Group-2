@@ -16,7 +16,7 @@ st.set_page_config(page_title="You're a Winner! Formulating Campaign Strategies 
 warnings.filterwarnings("ignore")
 st.set_option("deprecation.showPyplotGlobalUse",False)
 
-#importing local csvs 
+# importing local csvs 
 # INSERT HERE
 
 #list of pages ("AKA OUTLINE")
@@ -34,7 +34,7 @@ list_of_pages = [
 def project():
     #1st page - Project details
     st.title("You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability")
-    st.subheader('by Data Science Fellowship Cohort 9 - Group 2')
+    st.subheader('by Data Science Fellowship Cohort 8 - Group 2')
     st.write('Adrian, Bono, Grace, MaCris, Nico, Sofia (mentored by Aaron)')
 
     #teacher_image = Image.open('teacher.jpg') 
@@ -75,13 +75,16 @@ def background():
             "1. **Does a candidate have to be social media-savvy?**"
         )
         st.markdown(    
-            "2. **Does money really buy happiness, or in this case a seat in the office?**"
+            "2. **Do I listen to electoral surveys?**"
         )
         st.markdown(    
-            "3. **Should a political campaign focus on the younger voters? Perhaps the middle-aged ones?**"
+            "3. **Does money really buy happiness, or in this case a seat in the office?**"
         )
         st.markdown(    
-            "4. **Should a candidate focus on specific regions or municipalities?**"
+            "4. **Should a political campaign focus on the younger voters? Perhaps the middle-aged ones?**"
+        )
+        st.markdown(    
+            "5. **Should a candidate focus on specific regions or municipalities?**"
         )
     with col2:
         st.image(sdg4_image, caption='Source: Think Sustainability')
