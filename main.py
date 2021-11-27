@@ -256,7 +256,78 @@ def win_loss():
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
         st.markdown(
             'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+        #LOAD Data
+        df_cluster = pd.read_csv('ABIERA/data/2019-candidate-campaigns.csv', index_col=0)
+        df_cluster = df_cluster.fillna(0)
+        
+        st.markdown('Winners significantly spent on political ads vs those who lost the election.')
+        st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+        
+        pd.set_option('display.float_format', '{:,.3f}'.format)
+        from sklearn.preprocessing import Normalizer
+        from sklearn.cluster import KMeans
+        from sklearn.metrics import silhouette_score
+        
+        feature_cols = ['Travel Expenses',
+           'Compensation of campaigners, etc.', 'Communications',
+           'Stationery, Printing, and Distribution', 'Employment of Poll Watchers',
+           'Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads'
+        df_cluster = df_cluster[feature_cols]               ]
+        X = df_cluster[feature_cols]
+        X=Normalizer().fit_transform(X.values)
+        #find KMeans
+        kmeans = KMeans(n_clusters=3)
+        kmeans.fit(X)
+        y_kmeans = kmeans.predict(X)
+        #silhouette score
+        s_score = silhouette_score(X, y_kmeans)
+        #plotting for elbow curve and silhouette score
+        inertia = []
+        sil = []
+        for k in range(2,10):
+    
+            km = KMeans(n_clusters=k, random_state=1)
+            km.fit(X)
+            y_pred = km.predict(X)
 
+            inertia.append((k, km.inertia_))
+            sil.append((k, silhouette_score(X, y_pred)))
+        #show figure
+        fig, ax = plt.subplots(1,2, figsize=(16,8))
+        # Plotting Elbow Curve
+        x_iner = [x[0] for x in inertia]
+        y_iner  = [x[1] for x in inertia]
+        ax[0].plot(x_iner, y_iner)
+        ax[0].set_xlabel('Number of Clusters')
+        ax[0].set_ylabel('Intertia')
+        ax[0].set_title("Inertia Score - AKA. 'Elbow Curve'")
+
+        # Plotting Silhouetter Score
+        x_sil = [x[0] for x in sil]
+        y_sil  = [x[1] for x in sil]
+        ax[1].plot(x_sil, y_sil)
+        ax[1].set_xlabel('Number of Clusters')
+        ax[1].set_ylabel('Silhouetter Score')
+        ax[1].set_title('Silhouette Score Curve')
+        #show figure
+        st.markdown('We determine the best number of clusters by finding the inertia and silhoette score')
+        st.pyplot(fig)
+        
+        #Change index to cluster label
+        #kmeans = KMeans(n_clusters=3)
+        #kmeans.fit(X)
+        #labels = kmeans.predict(X)
+        #feature_cols = ['Travel Expenses',
+               #'Compensation of campaigners, etc.', 'Communications',
+               #'Stationery, Printing, and Distribution', 'Employment of Poll Watchers',
+               #'Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads','Win']
+        #df = df[feature_cols]
+        #df['Cluster Labels'] = labels
+        #df = df.set_index('Cluster Labels')
+        #df = df.groupby("Cluster Labels").mean().reset_index()
+        #df["Total"] = df["Travel Expenses"] + df["Compensation of campaigners, etc."]+df["Communications"]+df["Stationery, Printing, and Distribution"]+df["Employment of Poll Watchers"]+df["Rent, Maintenance, etc."]+df["Political Meetings and Rallies"]+df["Pol Ads"]
+ #showtable
+        #df
 
 def profile():
     # 5th page - Voter profiling
