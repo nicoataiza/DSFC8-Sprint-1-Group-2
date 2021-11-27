@@ -102,7 +102,18 @@ def data_method():
 def win_loss():
     # 4th page - Winners vs Losers
     # we can do yung select box thingy + multiple ifs para isang page nalang expenditures saka socmed
-    pass
+    option = st.selectbox('Select from the ff:', ['Social Media Presence', 'Contributions', 'Expenditures'])
+    if option == 'Social Media Presence':
+        st.markdown('The Philippines ranked first in internet and social media usage last 2020')
+        st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily')
+        # add photo nalang siguro or columns formatting
+    elif option == 'Contributions':
+        st.markdown('Winners have received significant contributions both in Cash and In-Kind.') 
+        st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
+        # add photo nalang siguro or columns formatting
+    elif option == 'Expenditures':
+        st.markdown('Winners significantly spent on political ads vs those who lost the election.')
+        st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
 
 def profile():
     # 5th page - Voter profiling
@@ -116,3 +127,28 @@ def conclusions():
 def references():
     # 7th page - References
     pass
+
+
+# loop to run pages
+page = st.sidebar.radio('Page selection:', list_of_pages)
+
+if page == "The Project":
+    project()
+    
+elif page == "Background and Objective":
+    background()
+    
+elif page == "Data Sources and Methodology":
+    data_method()
+
+elif page == "Winners vs Losers":
+    win_loss()
+    
+elif page == "Voter Profiling":
+    profile()
+
+elif page == "Conclusion and Recommendations":
+    conclusions()
+
+elif page == "References":
+    references()
