@@ -1,5 +1,4 @@
-   
-#import warnings
+import warnings
 import geopandas as gpd
 #import descartes
 import matplotlib.pyplot as plt
@@ -7,7 +6,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-#from PIL import Image => Check if this is in requirements.txt
+from PIL import Image 
 
 #page metadata => lifted directly from Aaron's Previous Group
 st.set_page_config(page_title="You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability",
@@ -39,6 +38,7 @@ def project():
 
     #teacher_image = Image.open('teacher.jpg') 
 
+    
     """
     col1, col2 = st.beta_columns(2)
     with col1:
@@ -92,10 +92,12 @@ def background():
 def data_method():
     #3rd page - Data Sources and Methodology
     st.title('Data Sources and Methodology')
+    st.subheader("Data Sources")
     st.write("")
     data_sources = Image.open("assets/Data_source.JPG")
     st.image(data_sources)
     st.write("")
+    st.subheader("Methodology")
     methodology = Image.open("assets/Methodology.JPG")
     st.image(methodology)
     
