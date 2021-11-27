@@ -128,7 +128,7 @@ def win_loss():
         
         #Visual stored in fig
         win = df.iloc[:, :4]
-        total_contrib = df.iloc[:, 8:-1]
+        total_contrib = df.iloc[:, 8:]
         df1 = pd.concat([win, total_contrib], axis=1)
         melted_df1=pd.melt(df1.iloc[:, 3:], id_vars="Win")
         
