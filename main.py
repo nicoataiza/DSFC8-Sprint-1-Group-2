@@ -346,6 +346,74 @@ def win_loss():
 
 # showtable
 # df
+        #Boxplots of Expenditures
+        import pandas as pd
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        pd.set_option('display.float_format', '{:,.4f}'.format)
+        pd.set_option('max_columns', 100)
+        df1 = pd.read_csv(r"data\2019-campaign-spending_clean.csv")
+        df2 = pd.read_csv(r"data\2019_Votes_PulseAsiaSurvey.csv")
+        
+        win = df1.iloc[:, :3]
+        exp = df1.iloc[:, 14:22]
+        melted_df1=pd.melt(df1.iloc[:, 2:], id_vars="Win")
+        melted_df1
+        
+        melted_df2=pd.melt(df1.iloc[:, 2:], id_vars="Win")
+
+        plt.figure(figsize=(12,8), dpi = 150)
+        sns.boxplot(y = melted_df2['variable'],
+                    x = melted_df2['value'],
+                    hue = melted_df2['Win'])
+
+        plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize = 20)
+        plt.ylabel('', fontsize= 40)
+        plt.xlabel('Expenditure Amount (in Ten Millions)', fontsize=20)
+        plt.xticks( fontsize=12)
+
+        plt.savefig("All expenses.png", dpi=150, bbox_inches="tight")
+        plt.show()
+        
+        #Scatterplots of Electoral Surveys vs Votes
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x= "Votes", y = "PulseAsia Survey 2019 (Jan 26-31)", data = df2, hue = "Win")
+        plt.title("Electoral Survey (Jan 26-31, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        plt.show()
+        
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x= "Votes", y = "PulseAsia Survey 2019 (Feb 24-28)", data = df2, hue = "Win")
+        plt.title("Electoral Survey (Feb 24-28, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        plt.show()
+        
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x= "Votes", y = "PulseAsia Survey 2019 (Mar 23-27)", data = df2, hue = "Win")
+        plt.title("Electoral Survey (Mar 23-27, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        plt.show()
+
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x= "Votes", y = "PulseAsia Survey 2019 (Apr 10-14)", data = df2, hue = "Win")
+        plt.title("Electoral Survey (Apr 10-14, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        plt.show()
+        
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x= "Votes", y = "PulseAsia Survey 2019 (May 3-6)", data = df2, hue = "Win")
+        plt.title("Electoral Survey (May 3-6, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        plt.show()
+
+        #Correlations of Votes and Surveys
+        df2.corr()
 
 def profile():
     # 5th page - Voter profiling
