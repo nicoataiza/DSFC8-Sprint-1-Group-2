@@ -37,23 +37,23 @@ def project():
     st.subheader('by Data Science Fellowship Cohort 8 - Group 2')
     st.write('Adrian, Bono, Grace, MaCris, Nico, Sofia (mentored by Aaron)')
 
-    # teacher_image = Image.open('teacher.jpg')
+    election_img = Image.open('JOVES/media/ph_election.jpg')
 
-    """
+    
     col1, col2 = st.beta_columns(2)
     with col1:
         st.image(
-            teacher_image,
-            caption='A teacher with her class of 59 students in a Quezon City public school. Source: The Guardian'
+            election_img,
+            caption='<insert caption>'
         )
     with col2:
         st.markdown(
-            "In this **exploratory data analysis**, we aim to uncover the distribution of public education resources "
-            "across the Philippines and identify critical deficiencies "
-            "through an assessment of **Maintenance and Other Operating Expenses (MOOE)** "
-            "allocation in the different regions."
+            "In this **exploratory data analysis**, we aim to identify the strategies that every candidate "
+            "participating in this upcoming election should look into "
+            "through an assessment of previous election data including contributions received, expenditures, "
+            "voter profiles and social media presence."
         )
-    """
+    
 
 
 def background():
