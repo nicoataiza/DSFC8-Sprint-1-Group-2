@@ -29,7 +29,7 @@ pd.set_option('display.float_format', '{:,.3f}'.format)
 
 # Set page config
 st.set_page_config(
-    page_title="You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability",
+    page_title="You're a Winner! Formulating Campaign Strategies to Ensure Candidate Winnability",
     layout="wide"
 )
 warnings.filterwarnings("ignore")
@@ -48,7 +48,7 @@ list_of_pages = [
 
 
 # List all functions
-@st.cache()
+@st.cache(allow_output_mutation=True)
 def load_data(option=None):
     if option == "2019-campaigns":
         data = pd.read_csv('JOVES/data/2019-candidate-campaigns.csv')
@@ -141,7 +141,7 @@ def data_method():
 
 
 def win_loss():
-    option = st.selectbox('Select from the ff:', ['Social Media Presence', 'Contributions', 'Expenditures'])
+    option = st.selectbox('Analysis on:', ['Social Media Presence','Electoral Surveys', 'Contributions', 'Expenditures'])
 
     if option == 'Social Media Presence':
         st.markdown('The Philippines ranked first in internet and social media usage last 2020')
@@ -188,13 +188,69 @@ def win_loss():
         df_merged.sort_values(by='Votes', ascending=False, inplace=True)
 
         # Generate scatter plot
-        fig = plt.figure(figsize=(10, 10))
+        fig = plt.figure(figsize=(12, 8), dpi=150)
         sns.scatterplot(y='Votes', x='Total Social Media Interactions', data=df_merged, hue='Win-Category', s=150)
         sns.despine()
         plt.title('Votes vs. Social Media Interactions', size=18)
         plt.xlabel('Social Media Interactions - in millions', size=12)
         plt.ylabel('Votes', size=12)
         st.pyplot(fig)
+        
+    elif option == 'Electoral Surveys':
+        
+        # Load the data
+        df2 = load_data(option="2019-surveys")  
+        
+        # Generate mapping function
+        def win_category(x):
+            if x == 1:
+                return 'Win'
+            else:
+                return 'Lose'
+
+        # Map function: 1 to Win and 0 to Lose
+        df2['Win Category'] = df2['Win'].apply(lambda x: win_category(x))
+        
+        # Plot scatter plots of electoral surveys vs votes
+        
+        fig1 = plt.figure(figsize=(10, 8))
+        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Jan 26-31)", data=df2, hue="Win Category")
+        plt.title("Electoral Survey (Jan 26-31, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        st.pyplot(fig1)
+
+        fig2 = plt.figure(figsize=(10, 8))
+        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Feb 24-28)", data=df2, hue="Win Category")
+        plt.title("Electoral Survey (Feb 24-28, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        st.pyplot(fig2)
+
+        fig3 = plt.figure(figsize=(10, 8))
+        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Mar 23-27)", data=df2, hue="Win Category")
+        plt.title("Electoral Survey (Mar 23-27, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        st.pyplot(fig3)
+
+        fig4 = plt.figure(figsize=(10, 8))
+        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Apr 10-14)", data=df2, hue="Win Category")
+        plt.title("Electoral Survey (Apr 10-14, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        st.pyplot(fig4)
+
+        fig5 = plt.figure(figsize=(10, 8))
+        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (May 3-6)", data=df2, hue="Win Category")
+        plt.title("Electoral Survey (May 3-6, 2019) vs Actual Votes", fontsize=20)
+        plt.xlabel("Actual Votes")
+        plt.ylabel("Electoral Survey %")
+        st.pyplot(fig5)
+        
+        # Compute correlations of votes and surveys
+        df2.corr()
+
 
     elif option == 'Contributions':
         # Load the data
@@ -222,15 +278,27 @@ def win_loss():
         total_contrib = df.iloc[:, 8:]
         df1 = pd.concat([win, total_contrib], axis=1)
         melted_df1 = pd.melt(df1.iloc[:, 3:], id_vars="Win")
+        
+        # Generate mapping function
+        def win_category(x):
+            if x == 1:
+                return 'Win'
+            else:
+                return 'Lose'
+
+        # Map function: 1 to Win and 0 to Lose
+        melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
 
         # Generate box plots
         fig = plt.figure(figsize=(12, 8), dpi=150)
         sns.boxplot(y=melted_df1['variable'],
                     x=melted_df1['value'],
-                    hue=melted_df1['Win'])
+                    hue=melted_df1['Win Category'])
+        
         plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
+        plt.legend(loc = 'lower right')
         plt.ylabel('Contribution Sources', fontsize=12)
-        plt.xlabel('Amount of Contributions received', fontsize=12)
+        plt.xlabel('Amount of Contributions Received', fontsize=12)
         plt.xticks(fontsize=15)
 
         # Display graph
@@ -241,16 +309,52 @@ def win_loss():
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
         st.markdown(
             'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+        
+        # Generate box plots of expenditures
+
+        # Load the data
+        df = load_data(option="2019-campaigns-v4")
+
+        win = df.iloc[:, :3]
+        exp = df.iloc[:, 14:22]
+        
+        df1 = pd.concat([win, exp], axis=1)
+
+        melted_df1 = pd.melt(df1.iloc[:, 2:], id_vars="Win")
+        
+        # Generate mapping function
+        def win_category(x):
+            if x == 1:
+                return 'Win'
+            else:
+                return 'Lose'
+
+        # Map function: 1 to Win and 0 to Lose
+        melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
+
+
+        # Plot the data
+        fig = plt.figure(figsize=(12, 8), dpi=150)
+        sns.boxplot(y=melted_df1['variable'],
+                    x=melted_df1['value'],
+                    hue=melted_df1['Win Category'])
+
+        plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
+        plt.ylabel('', fontsize=40)
+        plt.xlabel('Expenditure Amount', fontsize=15)
+        plt.xticks(fontsize=12)
+
+        st.pyplot(fig)
+
+
+        #Expenditures Clustering
+        st.markdown('Now we try to cluster Candidates based on their Expenditures.')
 
         # Load the data
         df_cluster = load_data(option="2019-campaigns-v3")
 
         # Fill nulls
         df_cluster = df_cluster.fillna(0)
-
-        st.markdown('Winners significantly spent on political ads vs those who lost the election.')
-        st.markdown(
-            'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
 
         # Clean the data
         feature_cols = [
@@ -289,7 +393,7 @@ def win_loss():
             sil.append((k, silhouette_score(X, y_pred)))
 
         # Show figure
-        fig, ax = plt.subplots(1, 2, figsize=(16, 8))
+        fig, ax = plt.subplots(1, 2, figsize=(16, 8), dpi=150)
 
         # Plot elbow curve
         x_iner = [x[0] for x in inertia]
@@ -308,73 +412,14 @@ def win_loss():
         ax[1].set_title('Silhouette Score Curve')
 
         # Show figure
-        st.markdown('We determine the best number of clusters by finding the inertia and silhoette score')
+        st.markdown('We determine the best number of clusters by finding the inertia and silhouette score')
         st.pyplot(fig)
-
-        # Generate box plots of expenditures
-
-        # Load the data
-        df1 = load_data(option="2019-campaigns-v4")
-        df2 = load_data(option="2019-surveys")
-
-        win = df1.iloc[:, :3]
-        exp = df1.iloc[:, 14:22]
-
-        melted_df1 = pd.melt(df1.iloc[:, 2:], id_vars="Win")
-        melted_df2 = pd.melt(df1.iloc[:, 2:], id_vars="Win")
-
-        # Plot the data
-        plt.figure(figsize=(12, 8), dpi=150)
-        sns.boxplot(y=melted_df2['variable'],
-                    x=melted_df2['value'],
-                    hue=melted_df2['Win'])
-
-        plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
-        plt.ylabel('', fontsize=40)
-        plt.xlabel('Expenditure Amount (in Ten Millions)', fontsize=20)
-        plt.xticks(fontsize=12)
-
-        plt.savefig("All expenses.png", dpi=150, bbox_inches="tight")
-        plt.show()
-
-        # Plot scatter plots of electoral surveys vs votes
-        plt.figure(figsize=(10, 8))
-        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Jan 26-31)", data=df2, hue="Win")
-        plt.title("Electoral Survey (Jan 26-31, 2019) vs Actual Votes", fontsize=20)
-        plt.xlabel("Actual Votes")
-        plt.ylabel("Electoral Survey %")
-        plt.show()
-
-        plt.figure(figsize=(10, 8))
-        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Feb 24-28)", data=df2, hue="Win")
-        plt.title("Electoral Survey (Feb 24-28, 2019) vs Actual Votes", fontsize=20)
-        plt.xlabel("Actual Votes")
-        plt.ylabel("Electoral Survey %")
-        plt.show()
-
-        plt.figure(figsize=(10, 8))
-        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Mar 23-27)", data=df2, hue="Win")
-        plt.title("Electoral Survey (Mar 23-27, 2019) vs Actual Votes", fontsize=20)
-        plt.xlabel("Actual Votes")
-        plt.ylabel("Electoral Survey %")
-        plt.show()
-
-        plt.figure(figsize=(10, 8))
-        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Apr 10-14)", data=df2, hue="Win")
-        plt.title("Electoral Survey (Apr 10-14, 2019) vs Actual Votes", fontsize=20)
-        plt.xlabel("Actual Votes")
-        plt.ylabel("Electoral Survey %")
-        plt.show()
-
-        plt.figure(figsize=(10, 8))
-        sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (May 3-6)", data=df2, hue="Win")
-        plt.title("Electoral Survey (May 3-6, 2019) vs Actual Votes", fontsize=20)
-        plt.xlabel("Actual Votes")
-        plt.ylabel("Electoral Survey %")
-        plt.show()
-
-        # Compute correlations of votes and surveys
-        df2.corr()
+        
+        st.markdown('Using the Elbow Method, we have identifed that the optimal number of clusters is 3.')
+        
+        #table summary of clusters and win rate
+        
+        #subplots of the bar plots per expenditure items
 
 
 def profile():
@@ -424,6 +469,7 @@ def profile():
     merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
     sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
     cbar = fig.colorbar(sm1, ax=axes)
+    st.pyplot(fig)
 
     # Get top 5
     province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
@@ -445,7 +491,7 @@ def profile():
     province_data.sort_values(by='2019 Total Voters Turnout (%)', ascending=False, inplace=True)
     df1 = province_data.set_index('Province').head(5)
     print(pd.DataFrame(df1['2019 Total Voters Turnout (%)']))
-
+    
 
 def conclusions():
     # 6th page - Conclusions and recommendations
