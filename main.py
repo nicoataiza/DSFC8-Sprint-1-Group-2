@@ -151,7 +151,7 @@ def data_method():
 
 def win_loss():
     st.title("What did Winners do differently?")
-    option = st.selectbox('Analysis on:', ['Social Media Presence','Electoral Surveys', 'Contributions', 'Expenditures'])
+    option = st.selectbox('Analysis on:', ['Social Media Presence','Electoral Surveys', 'Expenditures', 'Contributions'])
 
     if option == 'Social Media Presence':
         
@@ -304,156 +304,170 @@ def win_loss():
         df['Total In-Kind Contributions'] = df['In-Kind Contributions Received from Other Sources'] \
                                             + df['In-Kind Contributions Received from Political Party']
 
-        st.markdown('Winners have received significant contributions both in Cash and In-Kind.')
-        st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
+        col1, col2 = st.beta_columns([5,11])
+        with col1:
+            st.markdown('Winners have received significant contributions both in Cash and In-Kind.')
+            st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
+            st.markdown('Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate')
+            
+        with col2:
+            # Clean the data
+            win = df.iloc[:, :4]
+            total_contrib = df.iloc[:, 8:]
+            df1 = pd.concat([win, total_contrib], axis=1)
+            melted_df1 = pd.melt(df1.iloc[:, 3:], id_vars="Win")
 
-        # Clean the data
-        win = df.iloc[:, :4]
-        total_contrib = df.iloc[:, 8:]
-        df1 = pd.concat([win, total_contrib], axis=1)
-        melted_df1 = pd.melt(df1.iloc[:, 3:], id_vars="Win")
-        
-        # Generate mapping function
-        def win_category(x):
-            if x == 1:
-                return 'Win'
-            else:
-                return 'Lose'
+            # Generate mapping function
+            def win_category(x):
+                if x == 1:
+                    return 'Win'
+                else:
+                    return 'Lose'
 
-        # Map function: 1 to Win and 0 to Lose
-        melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
+            # Map function: 1 to Win and 0 to Lose
+            melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
 
-        # Generate box plots
-        fig = plt.figure(figsize=(12, 8), dpi=150)
-        sns.boxplot(y=melted_df1['variable'],
-                    x=melted_df1['value'],
-                    hue=melted_df1['Win Category'])
-        
-        plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
-        plt.legend(loc = 'lower right')
-        plt.ylabel('Contribution Sources', fontsize=12)
-        plt.xlabel('Amount of Contributions Received', fontsize=12)
-        plt.xticks(fontsize=15)
+            # Generate box plots
+            fig = plt.figure(figsize=(12, 8), dpi=150)
+            sns.boxplot(y=melted_df1['variable'],
+                        x=melted_df1['value'],
+                        hue=melted_df1['Win Category'])
 
-        # Display graph
-        st.pyplot(fig)
+            plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
+            plt.legend(loc = 'lower right')
+            plt.ylabel('Contribution Sources', fontsize=12)
+            plt.xlabel('Amount of Contributions Received', fontsize=12)
+            plt.xticks(fontsize=15)
+
+            # Display graph
+            st.pyplot(fig)
 
     elif option == 'Expenditures':
-
-        st.markdown('Winners significantly spent on political ads vs those who lost the election.')
-        st.markdown(
-            'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+        st.subheader('Intial Analysis on Expenditures by Item')
+        st.markdown('')
+        st.markdown('')
         
-        # Generate box plots of expenditures
-
-        # Load the data
-        df = load_data(option="2019-campaigns-v4")
-
-        win = df.iloc[:, :3]
-        exp = df.iloc[:, 14:22]
+        col1, col2 = st.beta_columns([5,11])
+        with col1:
+            st.markdown('Winners significantly spent on political ads vs those who lost the election.')
+            st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
         
-        df1 = pd.concat([win, exp], axis=1)
+        with col2:
+            # Generate box plots of expenditures
 
-        melted_df1 = pd.melt(df1.iloc[:, 2:], id_vars="Win")
-        
-        # Generate mapping function
-        def win_category(x):
-            if x == 1:
-                return 'Win'
-            else:
-                return 'Lose'
+            # Load the data
+            df = load_data(option="2019-campaigns-v4")
 
-        # Map function: 1 to Win and 0 to Lose
-        melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
+            win = df.iloc[:, :3]
+            exp = df.iloc[:, 14:22]
+
+            df1 = pd.concat([win, exp], axis=1)
+
+            melted_df1 = pd.melt(df1.iloc[:, 2:], id_vars="Win")
+
+            # Generate mapping function
+            def win_category(x):
+                if x == 1:
+                    return 'Win'
+                else:
+                    return 'Lose'
+
+            # Map function: 1 to Win and 0 to Lose
+            melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
 
 
-        # Plot the data
-        fig = plt.figure(figsize=(12, 8), dpi=150)
-        sns.boxplot(y=melted_df1['variable'],
-                    x=melted_df1['value'],
-                    hue=melted_df1['Win Category'])
+            # Plot the data
+            fig = plt.figure(figsize=(12, 8), dpi=150)
+            sns.boxplot(y=melted_df1['variable'],
+                        x=melted_df1['value'],
+                        hue=melted_df1['Win Category'])
 
-        plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
-        plt.ylabel('', fontsize=40)
-        plt.xlabel('Expenditure Amount', fontsize=15)
-        plt.xticks(fontsize=12)
+            plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
+            plt.ylabel('', fontsize=40)
+            plt.xlabel('Expenditure Amount', fontsize=15)
+            plt.xticks(fontsize=12)
 
-        st.pyplot(fig)
+            st.pyplot(fig)
 
 
         #Expenditures Clustering
-        st.markdown('Now we try to cluster Candidates based on their Expenditures.')
+        st.write('\n')
+        st.markdown('')
+        st.subheader('Now we try to cluster Candidates based on their Expenditures.')
+        st.markdown('')
 
-        # Load the data
-        df_cluster = load_data(option="2019-campaigns-v3")
+        col1, col2 = st.beta_columns([11,5])
+        with col1: 
+            # Load the data
+            df_cluster = load_data(option="2019-campaigns-v3")
 
-        # Fill nulls
-        df_cluster = df_cluster.fillna(0)
+            # Fill nulls
+            df_cluster = df_cluster.fillna(0)
 
-        # Clean the data
-        feature_cols = [
-            'Travel Expenses',
-            'Compensation of campaigners, etc.',
-            'Communications',
-            'Stationery, Printing, and Distribution',
-            'Employment of Poll Watchers',
-            'Rent, Maintenance, etc.',
-            'Political Meetings and Rallies',
-            'Pol Ads'
-        ]
-        df_cluster = df_cluster[feature_cols]
-        X = df_cluster[feature_cols]
+            # Clean the data
+            feature_cols = [
+                'Travel Expenses',
+                'Compensation of campaigners, etc.',
+                'Communications',
+                'Stationery, Printing, and Distribution',
+                'Employment of Poll Watchers',
+                'Rent, Maintenance, etc.',
+                'Political Meetings and Rallies',
+                'Pol Ads'
+            ]
+            df_cluster = df_cluster[feature_cols]
+            X = df_cluster[feature_cols]
 
-        # Normalize the data
-        X = Normalizer().fit_transform(X.values)
+            # Normalize the data
+            X = Normalizer().fit_transform(X.values)
 
-        # Implement k-Means clustering
-        kmeans = KMeans(n_clusters=3)
-        kmeans.fit(X)
-        y_kmeans = kmeans.predict(X)
+            # Implement k-Means clustering
+            kmeans = KMeans(n_clusters=3)
+            kmeans.fit(X)
+            y_kmeans = kmeans.predict(X)
 
-        # Compute silhoutte score
-        s_score = silhouette_score(X, y_kmeans)
+            # Compute silhoutte score
+            s_score = silhouette_score(X, y_kmeans)
 
-        # Plot elbow curve and silhouette score
-        inertia = []
-        sil = []
-        for k in range(2, 10):
-            km = KMeans(n_clusters=k, random_state=1)
-            km.fit(X)
-            y_pred = km.predict(X)
+            # Plot elbow curve and silhouette score
+            inertia = []
+            sil = []
+            for k in range(2, 10):
+                km = KMeans(n_clusters=k, random_state=1)
+                km.fit(X)
+                y_pred = km.predict(X)
 
-            inertia.append((k, km.inertia_))
-            sil.append((k, silhouette_score(X, y_pred)))
+                inertia.append((k, km.inertia_))
+                sil.append((k, silhouette_score(X, y_pred)))
 
-        # Show figure
-        fig, ax = plt.subplots(1, 2, figsize=(16, 8), dpi=150)
+            # Show figure
+            fig, ax = plt.subplots(1, 2, figsize=(16, 8), dpi=150)
 
-        # Plot elbow curve
-        x_iner = [x[0] for x in inertia]
-        y_iner = [x[1] for x in inertia]
-        ax[0].plot(x_iner, y_iner)
-        ax[0].set_xlabel('Number of Clusters')
-        ax[0].set_ylabel('Intertia')
-        ax[0].set_title("Inertia Score - AKA. 'Elbow Curve'")
+            # Plot elbow curve
+            x_iner = [x[0] for x in inertia]
+            y_iner = [x[1] for x in inertia]
+            ax[0].plot(x_iner, y_iner)
+            ax[0].set_xlabel('Number of Clusters')
+            ax[0].set_ylabel('Intertia')
+            ax[0].set_title("Inertia Score - AKA. 'Elbow Curve'")
 
-        # Plot silhouette score
-        x_sil = [x[0] for x in sil]
-        y_sil = [x[1] for x in sil]
-        ax[1].plot(x_sil, y_sil)
-        ax[1].set_xlabel('Number of Clusters')
-        ax[1].set_ylabel('Silhouetter Score')
-        ax[1].set_title('Silhouette Score Curve')
+            # Plot silhouette score
+            x_sil = [x[0] for x in sil]
+            y_sil = [x[1] for x in sil]
+            ax[1].plot(x_sil, y_sil)
+            ax[1].set_xlabel('Number of Clusters')
+            ax[1].set_ylabel('Silhouetter Score')
+            ax[1].set_title('Silhouette Score Curve')
+            
+            st.pyplot(fig)
 
-        # Show figure
-        st.markdown('We determine the best number of clusters by finding the inertia and silhouette score')
-        st.pyplot(fig)
-        
-        st.markdown('Using the Elbow Method, we have identifed that the optimal number of clusters is 3.')
-        
-        #table summary of clusters and win rate
-        
-        #subplots of the bar plots per expenditure items
+        with col2:
+            st.markdown('We determine the best number of clusters by finding the inertia and silhouette score')
+            st.markdown('Using the Elbow Method, we have identifed that the optimal number of clusters is 3.')
+
+            #table summary of clusters and win rate
+
+            #subplots of the bar plots per expenditure items
 
 
 def profile():
