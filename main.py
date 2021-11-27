@@ -471,78 +471,90 @@ def win_loss():
 
 
 def profile():
-    # Read shapefile
-    shapefile = load_data(option="provinces")
-    shapefile["x"] = shapefile.geometry.centroid.x
-    shapefile["y"] = shapefile.geometry.centroid.y
-
-    # Read csv
-    voter = load_data(option="2016-2019-voters")
-
-    # Wrangle the data
-    province = {}
-    for i in voter["Province"].unique():
-        s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
-        if len(s_province) == 1:
-            province[i] = s_province[0]
-        else:
-            province[i] = 'INPUT'
-
-    # Manually insert province
-    province['NCR'] = 'Metropolitan Manila'
-    province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
-
-    # Replace province name
-    voter["Province"] = voter["Province"].replace(province)
-
-    # Drop unnecessary columns
-    voter = voter.loc[:, ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
-
-    # Get sum per province
-    province_data = voter.groupby(
-        "Province"
-    ).agg(
-        {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
-    ).reset_index()
-    province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
-
-    # Merge shapefile and province data
-    merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
-
-    # Plot 1
-    variable0 = "2019-Registered_Voters"
-    vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-    fig, axes = plt.subplots(1, figsize=(15, 10))
-    axes.set_title("2019 Registered Voters (in million)", size=18)
-    merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
-    sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-    cbar = fig.colorbar(sm1, ax=axes)
-    st.pyplot(fig)
-
-    # Get top 5
-    province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
-    province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
-    df = province_data.set_index('Province').head(5)
-    print(pd.DataFrame(df['2019 Registered Voters (in million)']))
-
-    # Plot 2
-    variable0 = "2019-Total_Voters_Turnout"
-    vmin0, vmax0 = merged_data["2019-Total_Voters_Turnout"].min(), merged_data["2019-Total_Voters_Turnout"].max()
-    fig, axes = plt.subplots(1, figsize=(15, 10))
-    axes.set_title("2019 Total Voters Turnout", size=18)
-    merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
-    sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-    cbar = fig.colorbar(sm1, ax=axes)
-
-    # Get top 5
-    province_data.rename(columns={'2019-Total_Voters_Turnout': '2019 Total Voters Turnout (%)'}, inplace=True)
-    province_data.sort_values(by='2019 Total Voters Turnout (%)', ascending=False, inplace=True)
-    df1 = province_data.set_index('Province').head(5)
-    print(pd.DataFrame(df1['2019 Total Voters Turnout (%)']))
+    option = st.selectbox('Voter Pofile by:', ['Age Range','Registered Voters'])
     
+    if option == 'Age Range':
+        st.markdown('')
+
+    elif option == 'Registered Voters':
+        # Read shapefile
+        shapefile = load_data(option="provinces")
+        shapefile["x"] = shapefile.geometry.centroid.x
+        shapefile["y"] = shapefile.geometry.centroid.y
+
+        # Read csv
+        voter = load_data(option="2016-2019-voters")
+
+        # Wrangle the data
+        province = {}
+        for i in voter["Province"].unique():
+            s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
+            if len(s_province) == 1:
+                province[i] = s_province[0]
+            else:
+                province[i] = 'INPUT'
+
+        # Manually insert province
+        province['NCR'] = 'Metropolitan Manila'
+        province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
+
+        # Replace province name
+        voter["Province"] = voter["Province"].replace(province)
+
+        # Drop unnecessary columns
+        voter = voter.loc[:, ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
+
+        # Get sum per province
+        province_data = voter.groupby(
+            "Province"
+        ).agg(
+            {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
+        ).reset_index()
+        province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
+
+        # Merge shapefile and province data
+        merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
+
+        # Plot 1
+        variable0 = "2019-Registered_Voters"
+        vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
+        fig, axes = plt.subplots(1, figsize=(15, 10))
+        axes.set_title("2019 Registered Voters (in million)", size=18)
+        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
+        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+        cbar = fig.colorbar(sm1, ax=axes)
+        st.pyplot(fig)
+
+        # Get top 5
+        province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
+        province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
+        df = province_data.set_index('Province').head(5)
+        print(pd.DataFrame(df['2019 Registered Voters (in million)']))
+
+        # Plot 2
+        variable0 = "2019-Total_Voters_Turnout"
+        vmin0, vmax0 = merged_data["2019-Total_Voters_Turnout"].min(), merged_data["2019-Total_Voters_Turnout"].max()
+        fig, axes = plt.subplots(1, figsize=(15, 10))
+        axes.set_title("2019 Total Voters Turnout", size=18)
+        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
+        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+        cbar = fig.colorbar(sm1, ax=axes)
+
+        # Get top 5
+        province_data.rename(columns={'2019-Total_Voters_Turnout': '2019 Total Voters Turnout (%)'}, inplace=True)
+        province_data.sort_values(by='2019 Total Voters Turnout (%)', ascending=False, inplace=True)
+        df1 = province_data.set_index('Province').head(5)
+        print(pd.DataFrame(df1['2019 Total Voters Turnout (%)']))
+
 
 def conclusions():
     # 6th page - Conclusions and recommendations
+    st.title('Conclusions and recommendations')
+    st.write("")
+    data_sources = Image.open("assets/recommendations.JPG")
+    st.image(data_sources)
+    
+    
     pass
 
 
