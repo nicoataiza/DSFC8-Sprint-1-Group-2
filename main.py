@@ -63,11 +63,11 @@ def background():
         **winning candidates do (or not do) to set themselves apart from the rest.**")
 
     st.write(
-        "With respect to this, the group primarly on four questions derived from existing election data: "
+        "With respect to this, the group primarly on five questions derived from existing election data: "
     )
 
     pol_ad = Image.open('assets/pol_ad.jpg')
-    
+    st.write("")
     #Not sure if we should keep the columns imo
     col1, col2 = st.columns([1, 2])
     with col1:
