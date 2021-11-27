@@ -70,7 +70,7 @@ def background():
     pol_ad = Image.open('assets/pol_ad.jpg')
     st.write("")
     # Not sure if we should keep the columns imo
-    col1, col2 = st.columns([1, 2])
+    col1, col2 = st.beta_columns([1, 2])
     with col1:
         st.markdown(
             "1. **Does a candidate have to be social media-savvy?**"
@@ -121,25 +121,32 @@ def win_loss():
         campaign = pd.read_csv('2019-candidate-campaigns.csv')
         votes = pd.read_csv('2019-senatorial-votes.csv')
         # merge data
-        df_merged = pd.merge(left = campaign, right = votes, how = 'left', on = 'Candidate')
-        df_merged.head() 
+        df_merged = pd.merge(left=campaign, right=votes, how='left', on='Candidate')
+        df_merged.head()
         # count NaNs
         # meron din replace nalang with 0 haha
         df_merged.fillna(0, inplace=True)
         df_merged.isna().sum()
         # add features
         ## total social media interactions
-        df_merged['Twitter - Total Interactions'] = (df_merged['Twitter - Number of Mentions'] + df_merged['Twitter - Number of Users'] + df_merged['Twitter- Total Favorites'] + df_merged['Twitter - Total Retweets'] + + df_merged['Twitter - Total Replies'])/1000000
-        df_merged['Facebook - Total Interactions'] = (df_merged['Facebook - Number of Candidate Posts'] + df_merged['Facebook - Total Comments'] + df_merged['Facebook - Total Shares'] + df_merged['Facebook - Total Reactions']) / 1000000
-        df_merged['Total Social Media Interactions'] = df_merged['Twitter - Total Interactions'] + df_merged['Facebook - Total Interactions']
+        df_merged['Twitter - Total Interactions'] = (df_merged['Twitter - Number of Mentions'] + df_merged[
+            'Twitter - Number of Users'] + df_merged['Twitter- Total Favorites'] + df_merged[
+                                                         'Twitter - Total Retweets'] + + df_merged[
+            'Twitter - Total Replies']) / 1000000
+        df_merged['Facebook - Total Interactions'] = (df_merged['Facebook - Number of Candidate Posts'] + df_merged[
+            'Facebook - Total Comments'] + df_merged['Facebook - Total Shares'] + df_merged[
+                                                          'Facebook - Total Reactions']) / 1000000
+        df_merged['Total Social Media Interactions'] = df_merged['Twitter - Total Interactions'] + df_merged[
+            'Facebook - Total Interactions']
+
         ## win-loss categorical
         def win_category(x):
-          if x == 1:
-            return 'Win'
-          else:
-            return 'Lose'
+            if x == 1:
+                return 'Win'
+            else:
+                return 'Lose'
 
-        df_merged['Win-Category'] = df_merged['Win'].apply(lambda x : win_category(x))
+        df_merged['Win-Category'] = df_merged['Win'].apply(lambda x: win_category(x))
         ## sort by votes
         df_merged.sort_values(by='Votes', ascending=False, inplace=True)
 
@@ -151,19 +158,20 @@ def win_loss():
         df_winner.sort_values(by='Votes', inplace=True, ascending=False)
         df_loser.sort_values(by='Votes', inplace=True, ascending=False)
         # plotly winners
-        fig = px.bar(data_frame = df_winner, x='Candidate', y='Votes')
+        fig = px.bar(data_frame=df_winner, x='Candidate', y='Votes')
         fig.show()
         # plot losers
-        fig = px.bar(data_frame = df_loser, x='Candidate', y='Votes')
+        fig = px.bar(data_frame=df_loser, x='Candidate', y='Votes')
         fig.show()
         # plot all with color hue
-        fig = px.bar(data_frame = df_merged, x='Candidate', y='Votes', color='Win-Category')
+        fig = px.bar(data_frame=df_merged, x='Candidate', y='Votes', color='Win-Category')
         fig.show()
         # scatter socmed activities vs votes
         # hover_data > tooltips hover
         # color > similar to hue from seaborn
         # size > column based, need to know if can be set to static value
-        fig = px.scatter(data_frame=df_merged, x='Total Social Media Interactions', y='Votes', color='Win-Category', hover_data=['Candidate'], size = 'Votes')
+        fig = px.scatter(data_frame=df_merged, x='Total Social Media Interactions', y='Votes', color='Win-Category',
+                         hover_data=['Candidate'], size='Votes')
         fig.show()
         # plotly boxplot
         fig = px.box(data_frame=df_merged, y='Total Social Media Interactions', x='Win-Category')
@@ -171,7 +179,9 @@ def win_loss():
         # try side by side plotting
         import plotly.graph_objects as go
         candidates = df_merged['Candidate']
-        fig = go.Figure(data=[go.Bar(name='Social Media Activity', x=candidates, y=df_merged['Total Social Media Interactions']*1000000), go.Bar(name='Votes', x=candidates, y=df_merged['Votes'])])
+        fig = go.Figure(data=[go.Bar(name='Social Media Activity', x=candidates,
+                                     y=df_merged['Total Social Media Interactions'] * 1000000),
+                              go.Bar(name='Votes', x=candidates, y=df_merged['Votes'])])
         fig.update_layout(barmode='group')
         fig.show()
         # scale variables bago i-plot side by side haha
@@ -237,7 +247,7 @@ def win_loss():
         total_contrib = df.iloc[:, 8:]
         df1 = pd.concat([win, total_contrib], axis=1)
         melted_df1 = pd.melt(df1.iloc[:, 3:], id_vars="Win")
-        
+
         fig = plt.figure(figsize=(12, 8), dpi=150)
         sns.boxplot(y=melted_df1['variable'],
                     x=melted_df1['value'],
@@ -256,47 +266,53 @@ def win_loss():
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
         st.markdown(
             'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
-        #LOAD Data
+        # LOAD Data
         df_cluster = pd.read_csv('ABIERA/data/2019-candidate-campaigns.csv', index_col=0)
         df_cluster = df_cluster.fillna(0)
-        
+
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
-        st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
-        
+        st.markdown(
+            'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+
         pd.set_option('display.float_format', '{:,.3f}'.format)
         from sklearn.preprocessing import Normalizer
         from sklearn.cluster import KMeans
         from sklearn.metrics import silhouette_score
-        
-        feature_cols = ['Travel Expenses',
-           'Compensation of campaigners, etc.', 'Communications',
-           'Stationery, Printing, and Distribution', 'Employment of Poll Watchers',
-           'Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads'
-        df_cluster = df_cluster[feature_cols]               ]
+
+        feature_cols = [
+            'Travel Expenses',
+            'Compensation of campaigners, etc.',
+            'Communications',
+            'Stationery, Printing, and Distribution',
+            'Employment of Poll Watchers',
+            'Rent, Maintenance, etc.',
+            'Political Meetings and Rallies',
+            'Pol Ads'
+        ]
+        df_cluster = df_cluster[feature_cols]
         X = df_cluster[feature_cols]
-        X=Normalizer().fit_transform(X.values)
-        #find KMeans
+        X = Normalizer().fit_transform(X.values)
+        # find KMeans
         kmeans = KMeans(n_clusters=3)
         kmeans.fit(X)
         y_kmeans = kmeans.predict(X)
-        #silhouette score
+        # silhouette score
         s_score = silhouette_score(X, y_kmeans)
-        #plotting for elbow curve and silhouette score
+        # plotting for elbow curve and silhouette score
         inertia = []
         sil = []
-        for k in range(2,10):
-    
+        for k in range(2, 10):
             km = KMeans(n_clusters=k, random_state=1)
             km.fit(X)
             y_pred = km.predict(X)
 
             inertia.append((k, km.inertia_))
             sil.append((k, silhouette_score(X, y_pred)))
-        #show figure
-        fig, ax = plt.subplots(1,2, figsize=(16,8))
+        # show figure
+        fig, ax = plt.subplots(1, 2, figsize=(16, 8))
         # Plotting Elbow Curve
         x_iner = [x[0] for x in inertia]
-        y_iner  = [x[1] for x in inertia]
+        y_iner = [x[1] for x in inertia]
         ax[0].plot(x_iner, y_iner)
         ax[0].set_xlabel('Number of Clusters')
         ax[0].set_ylabel('Intertia')
@@ -304,30 +320,32 @@ def win_loss():
 
         # Plotting Silhouetter Score
         x_sil = [x[0] for x in sil]
-        y_sil  = [x[1] for x in sil]
+        y_sil = [x[1] for x in sil]
         ax[1].plot(x_sil, y_sil)
         ax[1].set_xlabel('Number of Clusters')
         ax[1].set_ylabel('Silhouetter Score')
         ax[1].set_title('Silhouette Score Curve')
-        #show figure
+        # show figure
         st.markdown('We determine the best number of clusters by finding the inertia and silhoette score')
         st.pyplot(fig)
-        
-        #Change index to cluster label
-        #kmeans = KMeans(n_clusters=3)
-        #kmeans.fit(X)
-        #labels = kmeans.predict(X)
-        #feature_cols = ['Travel Expenses',
-               #'Compensation of campaigners, etc.', 'Communications',
-               #'Stationery, Printing, and Distribution', 'Employment of Poll Watchers',
-               #'Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads','Win']
-        #df = df[feature_cols]
-        #df['Cluster Labels'] = labels
-        #df = df.set_index('Cluster Labels')
-        #df = df.groupby("Cluster Labels").mean().reset_index()
-        #df["Total"] = df["Travel Expenses"] + df["Compensation of campaigners, etc."]+df["Communications"]+df["Stationery, Printing, and Distribution"]+df["Employment of Poll Watchers"]+df["Rent, Maintenance, etc."]+df["Political Meetings and Rallies"]+df["Pol Ads"]
- #showtable
-        #df
+
+        # Change index to cluster label
+        # kmeans = KMeans(n_clusters=3)
+        # kmeans.fit(X)
+        # labels = kmeans.predict(X)
+        # feature_cols = ['Travel Expenses',
+        # 'Compensation of campaigners, etc.', 'Communications',
+        # 'Stationery, Printing, and Distribution', 'Employment of Poll Watchers',
+        # 'Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads','Win']
+        # df = df[feature_cols]
+        # df['Cluster Labels'] = labels
+        # df = df.set_index('Cluster Labels')
+        # df = df.groupby("Cluster Labels").mean().reset_index()
+        # df["Total"] = df["Travel Expenses"] + df["Compensation of campaigners, etc."]+df["Communications"]+df["Stationery, Printing, and Distribution"]+df["Employment of Poll Watchers"]+df["Rent, Maintenance, etc."]+df["Political Meetings and Rallies"]+df["Pol Ads"]
+
+
+# showtable
+# df
 
 def profile():
     # 5th page - Voter profiling
