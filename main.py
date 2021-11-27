@@ -66,10 +66,10 @@ def background():
         "With respect to this, the group primarly on four questions derived from existing election data: "
     )
 
-    #sdg4_image = Image.open('sdg4.jpg')
+    pol_ad = Image.open('assets/pol_ad.jpg')
     
     #Not sure if we should keep the columns imo
-    col1, col2 = st.beta_columns([1, 2])
+    col1, col2 = st.columns([1, 2])
     with col1:
         st.markdown(
             "1. **Does a candidate have to be social media-savvy?**"
@@ -87,7 +87,7 @@ def background():
             "5. **Should a candidate focus on specific regions or municipalities?**"
         )
     with col2:
-        st.image(sdg4_image, caption='Source: Think Sustainability')
+        st.image(pol_ad, caption='Source: BBC')
 
 def data_method():
     #3rd page - Data Sources and Methodology
