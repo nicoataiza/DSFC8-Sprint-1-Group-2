@@ -134,9 +134,10 @@ def win_loss():
         
         fig = plt.figure(figsize=(12,8), dpi = 150)
         sns.boxplot(y = melted_df1['variable'],
-            x = melted_df1['value'],
-            hue = melted_df1['Win'])
-        
+                    x = melted_df1['value'],
+                    hue = melted_df1['Win'])
+
+        plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize = 20)
         plt.ylabel('Contribution Sources', fontsize=12)
         plt.xlabel('Amount of Contributions received', fontsize=12)
         plt.xticks(fontsize=15)
