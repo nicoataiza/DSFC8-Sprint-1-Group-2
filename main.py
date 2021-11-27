@@ -59,9 +59,9 @@ def load_data(option=None):
     elif option == "2019-campaigns-v3":
         data = pd.read_csv('ABIERA/data/2019-candidate-campaigns.csv', index_col=0)
     elif option == "2019-campaigns-v4":
-        data = pd.read_csv(r"data\2019-campaign-spending_clean.csv")
+        data = pd.read_csv("data/2019-campaign-spending_clean.csv")
     elif option == "2019-surveys":
-        data = pd.read_csv(r"data\2019_Votes_PulseAsiaSurvey.csv")
+        data = pd.read_csv("data/2019_Votes_PulseAsiaSurvey.csv")
     elif option == "provinces":
         data = gpd.read_file('data/Provinces/Provinces.shp')
     elif option == "2016-2019-voters":
