@@ -1,5 +1,4 @@
-   
-#import warnings
+import warnings
 import geopandas as gpd
 #import descartes
 import matplotlib.pyplot as plt
@@ -7,7 +6,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-#from PIL import Image => Check if this is in requirements.txt
+from PIL import Image 
 
 #page metadata => lifted directly from Aaron's Previous Group
 st.set_page_config(page_title="You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability",
@@ -39,6 +38,7 @@ def project():
 
     #teacher_image = Image.open('teacher.jpg') 
 
+    
     """
     col1, col2 = st.beta_columns(2)
     with col1:
@@ -66,10 +66,10 @@ def background():
         "With respect to this, the group primarly on four questions derived from existing election data: "
     )
 
-    #sdg4_image = Image.open('sdg4.jpg')
+    pol_ad = Image.open('assets/pol_ad.jpg')
     
     #Not sure if we should keep the columns imo
-    col1, col2 = st.beta_columns([1, 2])
+    col1, col2 = st.columns([1, 2])
     with col1:
         st.markdown(
             "1. **Does a candidate have to be social media-savvy?**"
@@ -87,15 +87,17 @@ def background():
             "5. **Should a candidate focus on specific regions or municipalities?**"
         )
     with col2:
-        st.image(sdg4_image, caption='Source: Think Sustainability')
+        st.image(pol_ad, caption='Source: BBC')
 
 def data_method():
     #3rd page - Data Sources and Methodology
     st.title('Data Sources and Methodology')
+    st.subheader("Data Sources")
     st.write("")
     data_sources = Image.open("assets/Data_source.JPG")
     st.image(data_sources)
     st.write("")
+    st.subheader("Methodology")
     methodology = Image.open("assets/Methodology.JPG")
     st.image(methodology)
     
@@ -107,10 +109,42 @@ def win_loss():
         st.markdown('The Philippines ranked first in internet and social media usage last 2020')
         st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily')
         # add photo nalang siguro or columns formatting
+    
     elif option == 'Contributions':
+        #Data Loading
+        df_raw = pd.read_csv('UBALDO/data/2019-candidate-campaigns.csv', index_col=0)
+        df_raw.fillna(0, inplace=True)
+        
+        #Data Wrangling
+        candidates = df_raw.iloc[:, 0:3]
+        contrib = df_raw.loc[:, 'Win': 'Total Contributions Received'].fillna(0)
+        df = pd.concat([candidates,contrib], axis =1)
+        df['Total Cash Contributions'] = df['Cash Contributions Received from Other Sources'] + df['Cash Contributions Received from Political Party']
+        df['Total In-Kind Contributions'] = df['In-Kind Contributions Received from Other Sources'] + df['In-Kind Contributions Received from Political Party']
+        
+        #Insight
         st.markdown('Winners have received significant contributions both in Cash and In-Kind.') 
         st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
+        
+        #Visual stored in fig
+        win = df.iloc[:, :4]
+        total_contrib = df.iloc[:, 8:-1]
+        df1 = pd.concat([win, total_contrib], axis=1)
+        melted_df1=pd.melt(df1.iloc[:, 3:], id_vars="Win")
+        
+        fig = plt.figure(figsize=(12,8), dpi = 150)
+        sns.boxplot(y = melted_df1['variable'],
+            x = melted_df1['value'],
+            hue = melted_df1['Win'])
+        
+        plt.ylabel('Contribution Sources', fontsize=12)
+        plt.xlabel('Amount of Contributions received', fontsize=12)
+        plt.xticks(fontsize=15)
+
+        #display graph
+        st.pyplot(fig)
         # add photo nalang siguro or columns formatting
+    
     elif option == 'Expenditures':
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
         st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
