@@ -44,7 +44,7 @@ def project():
     with col1:
         st.image(
             election_img,
-            caption='<insert caption>'
+            caption='image from Rappler - How can we improve PH democracy?'
         )
     with col2:
         st.markdown(
