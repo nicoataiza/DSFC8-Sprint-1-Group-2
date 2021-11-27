@@ -109,10 +109,42 @@ def win_loss():
         st.markdown('The Philippines ranked first in internet and social media usage last 2020')
         st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily')
         # add photo nalang siguro or columns formatting
+    
     elif option == 'Contributions':
+        #Data Loading
+        df_raw = pd.read_csv('UBALDO/data/2019-candidate-campaigns.csv', index_col=0)
+        df_raw.fillna(0, inplace=True)
+        
+        #Data Wrangling
+        candidates = df_raw.iloc[:, 0:3]
+        contrib = df_raw.loc[:, 'Win': 'Total Contributions Received'].fillna(0)
+        df = pd.concat([candidates,contrib], axis =1)
+        df['Total Cash Contributions'] = df['Cash Contributions Received from Other Sources'] + df['Cash Contributions Received from Political Party']
+        df['Total In-Kind Contributions'] = df['In-Kind Contributions Received from Other Sources'] + df['In-Kind Contributions Received from Political Party']
+        
+        #Insight
         st.markdown('Winners have received significant contributions both in Cash and In-Kind.') 
         st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
+        
+        #Visual stored in fig
+        win = df.iloc[:, :4]
+        total_contrib = df.iloc[:, 8:-1]
+        df1 = pd.concat([win, total_contrib], axis=1)
+        melted_df1=pd.melt(df1.iloc[:, 3:], id_vars="Win")
+        
+        fig = plt.figure(figsize=(12,8), dpi = 150)
+        sns.boxplot(y = melted_df1['variable'],
+            x = melted_df1['value'],
+            hue = melted_df1['Win'])
+        
+        plt.ylabel('Contribution Sources', fontsize=12)
+        plt.xlabel('Amount of Contributions received', fontsize=12)
+        plt.xticks(fontsize=15)
+
+        #display graph
+        st.pyplot(fig)
         # add photo nalang siguro or columns formatting
+    
     elif option == 'Expenditures':
         st.markdown('Winners significantly spent on political ads vs those who lost the election.')
         st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
