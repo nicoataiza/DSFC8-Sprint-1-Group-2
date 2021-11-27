@@ -118,8 +118,8 @@ def win_loss():
         import plotly.express as px
 
         # read data from local
-        campaign = pd.read_csv('2019-candidate-campaigns.csv')
-        votes = pd.read_csv('2019-senatorial-votes.csv')
+        campaign = pd.read_csv('JOVES/data/2019-candidate-campaigns.csv')
+        votes = pd.read_csv('JOVES/data/2019-senatorial-votes.csv')
         # merge data
         df_merged = pd.merge(left=campaign, right=votes, how='left', on='Candidate')
         df_merged.head()
@@ -149,80 +149,18 @@ def win_loss():
         df_merged['Win-Category'] = df_merged['Win'].apply(lambda x: win_category(x))
         ## sort by votes
         df_merged.sort_values(by='Votes', ascending=False, inplace=True)
-
-        df_merged.head()
-        # split into winners & losers
-        df_winner = df_merged[df_merged['Win'] == 1].copy()
-        df_loser = df_merged[df_merged['Win'] == 0].copy()
-        # sort by votes
-        df_winner.sort_values(by='Votes', inplace=True, ascending=False)
-        df_loser.sort_values(by='Votes', inplace=True, ascending=False)
-        # plotly winners
-        fig = px.bar(data_frame=df_winner, x='Candidate', y='Votes')
-        fig.show()
-        # plot losers
-        fig = px.bar(data_frame=df_loser, x='Candidate', y='Votes')
-        fig.show()
-        # plot all with color hue
-        fig = px.bar(data_frame=df_merged, x='Candidate', y='Votes', color='Win-Category')
-        fig.show()
-        # scatter socmed activities vs votes
-        # hover_data > tooltips hover
-        # color > similar to hue from seaborn
-        # size > column based, need to know if can be set to static value
-        fig = px.scatter(data_frame=df_merged, x='Total Social Media Interactions', y='Votes', color='Win-Category',
-                         hover_data=['Candidate'], size='Votes')
-        fig.show()
-        # plotly boxplot
-        fig = px.box(data_frame=df_merged, y='Total Social Media Interactions', x='Win-Category')
-        fig.show()
-        # try side by side plotting
-        import plotly.graph_objects as go
-        candidates = df_merged['Candidate']
-        fig = go.Figure(data=[go.Bar(name='Social Media Activity', x=candidates,
-                                     y=df_merged['Total Social Media Interactions'] * 1000000),
-                              go.Bar(name='Votes', x=candidates, y=df_merged['Votes'])])
-        fig.update_layout(barmode='group')
-        fig.show()
-        # scale variables bago i-plot side by side haha
-
-        # scatter activity + wins
-        plt.figure(figsize=(10, 10))
+        
+        # plot scatter
+        fig  = plt.figure(figsize=(10, 10))
         sns.scatterplot(y='Votes', x='Total Social Media Interactions', data=df_merged, hue='Win-Category', s=150)
         sns.despine()
         plt.title('Votes vs. Social Media Interactions', size=18)
         plt.xlabel('Social Media Interactions - in millions', size=12)
         plt.ylabel('Votes', size=12)
-        # plt.show()
-        plt.savefig("scatter-votesXsocmed.png", transparent=True, bbox_inches='tight')
-
-        # barplot of votes
-        plt.figure(figsize=(15, 5))
-        sns.barplot(x='Candidate', y='Votes', data=df_merged.head(30), hue='Win-Category')
-        sns.despine()
-        plt.title('Senatorial Election Results', size=18)
-        plt.ylabel('Votes', size=12)
-        plt.xticks(rotation=90)
-        # plt.show()
-        plt.savefig("barplot-votes.png", transparent=True, bbox_inches='tight')
-
-        # barplot of SMS activites
-        plt.figure(figsize=(15, 5))
-        sns.barplot(x='Candidate', y='Total Social Media Interactions', data=df_merged.head(30), hue='Win-Category')
-        sns.despine()
-        plt.title('Social Media Presence per Candidate', size=18)
-        plt.ylabel('Social Media Interactions - in millions', size=12)
-        plt.xticks(rotation=90)
-        # plt.show()
-        plt.savefig("barplot-socmed.png", transparent=True, bbox_inches='tight')
-
-        # box plot of social media activities per winners and losers
-        plt.figure(figsize=(10, 10))
-        sns.boxplot(x='Win-Category', y='Total Social Media Interactions', data=df_merged)
-        plt.title('Social Media Presence per Candidate', size=18)
-        plt.ylabel('Social Media Interactions - in millions', size=12)
-        plt.show()
-        # add photo nalang siguro or columns formatting
+        st.pyplot(fig)
+        # plt.savefig("scatter-votesXsocmed.png", transparent=True, bbox_inches='tight')
+        
+        # 
 
     elif option == 'Contributions':
         # Data Loading
