@@ -129,17 +129,25 @@ def background():
 def data_method():
     st.title('Data Sources and Methodology')
     st.write("")
-    col1, col2 = st.beta_columns(2)
-    with col1:
-        data_sources = Image.open("assets/Data Source.JPG")
-        st.image(data_sources)
-    with col2:
-        methodology = Image.open("assets/Methodology2.JPG")
-        st.image(methodology)
+    #col1, col2 = st.beta_columns(2)
+    #with col1:
+        #data_sources = Image.open("assets/Data Source.JPG")
+        #st.image(data_sources)
+    #with col2:
+        #methodology = Image.open("assets/Methodology3.JPG")
+        #st.image(methodology)
     
-    st.subheader("Data Sources")
+    st.write("")
+    data_sources = Image.open("assets/Data Source.JPG")
+    st.image(data_sources)
 
     st.write("")
+    methodology = Image.open("assets/Methodology3.JPG")
+    st.image(methodology)
+    
+    
+    st.write("")
+    st.subheader("Data Sources")
     data_sources = Image.open("assets/Data_source.JPG")
     st.image(data_sources)
 
