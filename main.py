@@ -137,13 +137,13 @@ def data_method():
         #methodology = Image.open("assets/Methodology3.JPG")
         #st.image(methodology)
     
-    st.write("")
-    data_sources = Image.open("assets/Data Source.jpg")
-    st.image(data_sources)
+#     st.write("")
+#     data_sources = Image.open("assets/Data Source.jpg")
+#     st.image(data_sources)
 
-    st.write("")
-    methodology = Image.open("assets/Methodology3.jpg")
-    st.image(methodology)
+#     st.write("")
+#     methodology = Image.open("assets/Methodology3.jpg")
+#     st.image(methodology)
     
     
     st.write("")
@@ -567,7 +567,7 @@ def conclusions():
     # 6th page - Conclusions and recommendations
     st.title('Conclusions and recommendations')
     st.write("")
-    data_sources = Image.open("assets/recommendations.JPG")
+    data_sources = Image.open("assets/recommendations.jpg")
     st.image(data_sources)
     
     
