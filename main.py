@@ -599,8 +599,9 @@ def references():
     st.write(
         "•   Chua, K. (2021). PH remains top in social media, internet usage worldwide – report. [online] Rappler. Available at:"                   "https://www.rappler.com/technology/internet-culture/hootsuite-we-are-social-2021-philippines-top-social-media-internet-usage.")
     st.write(
-        "•   Unsplash (n.d.). Photo by Stel on Unsplash. [online] unsplash.com. Available at: https://unsplash.com/photos/xcWuKeAkXBM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink [Accessed 27 Nov. 2021].")
-    pass
+        "•   How can we improve PH Democracy? [online] rappler.com. Available at: https://www.rappler.com/nation/philippine-democracy-quality-participation")
+    st.write(
+        "•   Filipinos Lead the World in... Social Media 'Addiction' [online] esquiremag.ph. Available at: https://www.esquiremag.ph/money/industry/filipinos-social-media-addiction")
 
 
 # loop to run pages
