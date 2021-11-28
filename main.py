@@ -168,7 +168,7 @@ def win_loss():
         with col1:
             st.markdown('The Philippines ranked first in internet and social media usage last 2020.')
             st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily.')
-            st.markdown('There is a weak correlation between the number votes and total social media interaction.')
+            st.markdown('And yet, there is a weak correlation between the number votes and total social media interaction.')
             st.subheader('Social Media presence while impactful is not a guarantee to winning votes.')
 
         with col2:
