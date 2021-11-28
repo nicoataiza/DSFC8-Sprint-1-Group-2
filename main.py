@@ -575,7 +575,10 @@ def profile():
 def conclusions():
     # 6th page - Conclusions and recommendations
     st.title('Conclusions and Recommendations')
-    st.write("")
+    st.write("The election is more than just a simple popularity game. Though  popular candidates have a head start, it does not"                         " necessarily translate to votes. Election campaigning is a strategic game that combines both machineries and resources"
+             " as well as careful planning and execution to win the votes of the people.")
+
+    st.write("As such, here are the factors that candidate should focus on developing a winning campaign strategy.")
     data_sources = Image.open("assets/recommendations.jpg")
     st.image(data_sources)
     
@@ -585,6 +588,18 @@ def conclusions():
 
 def references():
     # 7th page - References
+    st.title('References')
+    st.write(
+        "•   Census-based Population Projections in collaboration with the Inter-Agency Working Group on Population Projections. (2010)."            "[online] Available at: https://psa.gov.ph/sites/default/files/attachments/hsd/pressrelease/Table4_9.pdf.")
+    st.write(
+        "•   psa.gov.ph. (n.d.). Philippine Statistics Authority | Republic of the Philippines. [online] Available"
+        "at: https://psa.gov.ph/gender-stat/wmf.")
+    st.write(
+        "•   psa.gov.ph. (n.d.). Highlights of the Philippine Population 2020 Census of Population and Housing (2020 CPH) | Philippine"              "Statistics Authority. [online] Available at: https://psa.gov.ph/content/highlights-philippine-population-2020-census-population-and-housing-2020-cph.")
+    st.write(
+        "•   Chua, K. (2021). PH remains top in social media, internet usage worldwide – report. [online] Rappler. Available at:"                   "https://www.rappler.com/technology/internet-culture/hootsuite-we-are-social-2021-philippines-top-social-media-internet-usage.")
+    st.write(
+        "•   Unsplash (n.d.). Photo by Stel on Unsplash. [online] unsplash.com. Available at: https://unsplash.com/photos/xcWuKeAkXBM?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink [Accessed 27 Nov. 2021].")
     pass
 
 
