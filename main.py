@@ -1,4 +1,4 @@
-#import descartes
+# import descartes
 import geopandas as gpd
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -49,7 +49,7 @@ list_of_pages = [
 
 
 # List all functions
-#@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def load_data(option=None):
     if option == "2019-campaigns":
         data = pd.read_csv('JOVES/data/2019-candidate-campaigns.csv')
@@ -130,23 +130,22 @@ def background():
 def data_method():
     st.title('Data Sources and Methodology')
     st.write("")
-    #col1, col2 = st.beta_columns(2)
-    #with col1:
-        #data_sources = Image.open("assets/Data Source.JPG")
-        #st.image(data_sources)
-    #with col2:
-        #methodology = Image.open("assets/Methodology3.JPG")
-        #st.image(methodology)
-    
-#     st.write("")
-#     data_sources = Image.open("assets/Data Source.jpg")
-#     st.image(data_sources)
+    # col1, col2 = st.beta_columns(2)
+    # with col1:
+    # data_sources = Image.open("assets/Data Source.JPG")
+    # st.image(data_sources)
+    # with col2:
+    # methodology = Image.open("assets/Methodology3.JPG")
+    # st.image(methodology)
 
-#     st.write("")
-#     methodology = Image.open("assets/Methodology3.jpg")
-#     st.image(methodology)
-    
-    
+    #     st.write("")
+    #     data_sources = Image.open("assets/Data Source.jpg")
+    #     st.image(data_sources)
+
+    #     st.write("")
+    #     methodology = Image.open("assets/Methodology3.jpg")
+    #     st.image(methodology)
+
     st.write("")
     st.subheader("Data Sources")
     data_sources = Image.open("assets/Data_source.JPG")
@@ -160,11 +159,12 @@ def data_method():
 
 def win_loss():
     st.title("What did Winners do differently?")
-    option = st.selectbox('Analysis on:', ['Social Media Presence','Electoral Surveys', 'Expenditures', 'Contributions'])
+    option = st.selectbox('Analysis on:',
+                          ['Social Media Presence', 'Electoral Surveys', 'Expenditures', 'Contributions'])
 
     if option == 'Social Media Presence':
-        
-        col1, col2 = st.beta_columns([5,11])
+
+        col1, col2 = st.beta_columns([5, 11])
         with col1:
             st.markdown('The Philippines ranked first in internet and social media usage last 2020.')
             st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily.')
@@ -222,25 +222,26 @@ def win_loss():
             st.pyplot(fig)
 
     elif option == 'Electoral Surveys':
-        
-        st.subheader("It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
-        
+
+        st.subheader(
+            "It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
+
         # Load the data
         df2 = load_data(option="2019-surveys")
-        
-        col1, col2 = st.beta_columns([10,10])
+
+        col1, col2 = st.beta_columns([10, 10])
         with col1:
             # Compute correlations of votes and surveys
-            votes = df2.iloc[:,4:5]
+            votes = df2.iloc[:, 4:5]
             pulse = df2.iloc[:, 6:11]
-            df_cor = pd.concat([votes,pulse], axis=1)
+            df_cor = pd.concat([votes, pulse], axis=1)
             st.table(df_cor.corr())
 
         with col2:
             option = st.selectbox(
                 'Select Date:',
                 ['Jan 26-31, 2019', 'Feb 24-28, 2019', 'Mar 23-27, 2019', 'Apr 10-14, 2019', 'May 3-6, 2019'])
-        
+
             # Generate mapping function
             def win_category(x):
                 if x == 1:
@@ -283,7 +284,7 @@ def win_loss():
                 plt.xlabel("Actual Votes")
                 plt.ylabel("Electoral Survey %")
                 st.pyplot(fig4)
-                
+
             elif option == "May 3-6, 2019":
                 fig5 = plt.figure(figsize=(10, 6))
                 sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (May 3-6)", data=df2, hue="Win Category")
@@ -292,7 +293,7 @@ def win_loss():
                 plt.ylabel("Electoral Survey %")
                 st.pyplot(fig5)
 
-            
+
 
 
     elif option == 'Contributions':
@@ -313,12 +314,13 @@ def win_loss():
         df['Total In-Kind Contributions'] = df['In-Kind Contributions Received from Other Sources'] \
                                             + df['In-Kind Contributions Received from Political Party']
 
-        col1, col2 = st.beta_columns([5,11])
+        col1, col2 = st.beta_columns([5, 11])
         with col1:
             st.markdown('Winners have received significant contributions both in cash and in-Kind.')
             st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
-            st.markdown('Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate.')
-            
+            st.markdown(
+                'Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate.')
+
         with col2:
             # Clean the data
             win = df.iloc[:, :4]
@@ -344,8 +346,8 @@ def win_loss():
                         hue=melted_df1['Win Category'],
                         palette=my_pal)
 
-            #plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
-            plt.legend(loc = 'lower right')
+            # plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
+            plt.legend(loc='lower right')
             plt.ylabel('Contribution Sources', fontsize=12)
             plt.xlabel('Amount of Contributions Received', fontsize=12)
             plt.xticks(fontsize=15)
@@ -357,12 +359,13 @@ def win_loss():
         st.subheader('Initial Analysis on Expenditures by Item')
         st.markdown('')
         st.markdown('')
-        
-        col1, col2 = st.beta_columns([5,11])
+
+        col1, col2 = st.beta_columns([5, 11])
         with col1:
             st.markdown('Winners significantly spent on political ads vs those who lost the election.')
-            st.markdown('Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
-        
+            st.markdown(
+                'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+
         with col2:
             # Generate box plots of expenditures
 
@@ -386,29 +389,27 @@ def win_loss():
             # Map function: 1 to Win and 0 to Lose
             melted_df1['Win Category'] = melted_df1['Win'].apply(lambda x: win_category(x))
 
-
             # Plot the data
             fig = plt.figure(figsize=(12, 8), dpi=150)
             sns.boxplot(y=melted_df1['variable'],
                         x=melted_df1['value'],
                         hue=melted_df1['Win Category'])
 
-            #plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
+            # plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
             plt.ylabel('', fontsize=40)
             plt.xlabel('Expenditure Amount', fontsize=15)
             plt.xticks(fontsize=12)
 
             st.pyplot(fig)
 
-
-        #Expenditures Clustering
+        # Expenditures Clustering
         st.write('\n')
         st.markdown('')
         st.subheader('Now we try to cluster Candidates based on their Expenditures.')
         st.markdown('')
 
-        col1, col2 = st.beta_columns([11,5])
-        with col1: 
+        col1, col2 = st.beta_columns([11, 5])
+        with col1:
             # Load the data
             df_cluster = load_data(option="2019-campaigns-v3")
 
@@ -469,115 +470,132 @@ def win_loss():
             ax[1].set_xlabel('Number of Clusters')
             ax[1].set_ylabel('Silhouette Score')
             ax[1].set_title('Silhouette Score Curve')
-            
+
             st.pyplot(fig)
 
         with col2:
             st.markdown('We determine the best number of clusters by finding the inertia and silhouette score')
-            st.markdown('Using the Elbow Method, we have identifed that the optimal number of clusters is 3.')
+            st.markdown('Using the Elbow Method, we have identified that the optimal number of clusters is 3.')
 
-            #table summary of clusters and win rate
+        # Regenerate k-Means clustering
         kmeans = KMeans(n_clusters=3)
         kmeans.fit(X)
         labels = kmeans.predict(X)
-        feature_cols = ['Travel Expenses','Compensation of campaigners, etc.', 'Communications','Stationery, Printing, and Distribution','Employment of Poll Watchers','Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads']
+        feature_cols = [
+            'Travel Expenses',
+            'Compensation of campaigners, etc.',
+            'Communications',
+            'Stationery, Printing, and Distribution',
+            'Employment of Poll Watchers',
+            'Rent, Maintenance, etc.',
+            'Political Meetings and Rallies',
+            'Pol Ads'
+        ]
         df_cluster = df_cluster[feature_cols]
-            #set cluster Labels as index
         df_cluster['Cluster Labels'] = labels
-        df_cluster= df_cluster.groupby("Cluster Labels").mean().reset_index()    
-        
-            #subplots of the bar plots per expenditure items
+        df_cluster = df_cluster.groupby("Cluster Labels").mean().reset_index()
+
+        # Profile each cluster
+        st.subheader("After implementing clustering, we profiled the clusters based on their individual expenses: ")
         for column in df_cluster.columns:
-                  if column == "index" or column == "Cluster Labels":
-                    pass
-                  else:
-                    fig, ax =plt.subplots(1,1)
-                    sns.barplot(
-                        x="Cluster Labels", 
-                        y=column, 
-                        hue=column, 
-                        data=df_cluster,
-                        dodge=False
-                        )
-                    st.pyplot(fig)    
-        st.markdown('We can say that higher expenses result to high chances of winning')
+            if column == "index" or column == "Cluster Labels":
+                pass
+            else:
+                fig, ax = plt.subplots(1, 1)
+                sns.barplot(
+                    x="Cluster Labels",
+                    y=column,
+                    hue=column,
+                    data=df_cluster,
+                    dodge=False
+                )
+                plt.ticklabel_format(style='plain', axis='y', useOffset=False)
+                ax.set(xlabel='Clusters', ylabel='Expenses (in pesos)', title=column)
+                ax.legend([], [], frameon=False)
+                st.pyplot(fig)
+
 
 def profile():
-    option = st.selectbox('Voter Pofile by:', ['Age Range','Registered Voters'])
-    
-    if option == 'Age Range':
+    # option = st.selectbox('Voter Pofile by:', ['Age Range', 'Registered Voters'])
+
+    # if option == 'Age Range':
+    #    st.markdown('')
+
+    # elif option == 'Registered Voters':
+
+    st.header("Voter Profile by Registered Voters")
+    # Read shapefile
+    shapefile = load_data(option="provinces")
+    shapefile["x"] = shapefile.geometry.centroid.x
+    shapefile["y"] = shapefile.geometry.centroid.y
+
+    # Read csv
+    voter = load_data(option="2016-2019-voters")
+
+    # Wrangle the data
+    province = {}
+    for i in voter["Province"].unique():
+        s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
+        if len(s_province) == 1:
+            province[i] = s_province[0]
+        else:
+            province[i] = 'INPUT'
+
+    # Manually insert province
+    province['NCR'] = 'Metropolitan Manila'
+    province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
+
+    # Replace province name
+    voter["Province"] = voter["Province"].replace(province)
+
+    # Drop unnecessary columns
+    voter = voter.loc[:,
+            ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
+
+    # Get sum per province
+    province_data = voter.groupby(
+        "Province"
+    ).agg(
+        {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
+    ).reset_index()
+    province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
+
+    # Merge shapefile and province data
+    merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
+
+    col1, col2 = st.beta_columns([8, 9])
+    with col1:
+        st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
+        st.markdown('The same provinces is also the top 3 Provinces in terms population count')
+        st.markdown('')
         st.markdown('')
 
-    elif option == 'Registered Voters':
-        # Read shapefile
-        shapefile = load_data(option="provinces")
-        shapefile["x"] = shapefile.geometry.centroid.x
-        shapefile["y"] = shapefile.geometry.centroid.y
+        # Get top 5
+        province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'},
+                             inplace=True)
+        province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
+        df = province_data.set_index('Province').head(5)
+        # print(pd.DataFrame(df['2019 Registered Voters (in million)']))
+        st.write(province_data.set_index('Province').iloc[:, :1].head(5))
 
-        # Read csv
-        voter = load_data(option="2016-2019-voters")
+    with col2:
+        # Plot 1
+        variable0 = "2019-Registered_Voters"
+        vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
+        fig, axes = plt.subplots(1, figsize=(7, 8))
+        axes.set_title("2019 Registered Voters (in millions)", size=12)
+        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0,
+                         vmax=vmax0)
+        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+        cbar = fig.colorbar(sm1, ax=axes)
+        st.pyplot(fig)
 
-        # Wrangle the data
-        province = {}
-        for i in voter["Province"].unique():
-            s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
-            if len(s_province) == 1:
-                province[i] = s_province[0]
-            else:
-                province[i] = 'INPUT'
 
-        # Manually insert province
-        province['NCR'] = 'Metropolitan Manila'
-        province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
-
-        # Replace province name
-        voter["Province"] = voter["Province"].replace(province)
-
-        # Drop unnecessary columns
-        voter = voter.loc[:, ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
-
-        # Get sum per province
-        province_data = voter.groupby(
-            "Province"
-        ).agg(
-            {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
-        ).reset_index()
-        province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
-
-        # Merge shapefile and province data
-        merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
-
-                
-
-        col1, col2 = st.beta_columns([8,9])
-        with col1:
-            st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
-            st.markdown('The same provinces is also the top 3 Provinces in terms population count')
-            st.markdown('')
-            st.markdown('')
-
-            # Get top 5
-            province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
-            province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
-            df = province_data.set_index('Province').head(5)
-            #print(pd.DataFrame(df['2019 Registered Voters (in million)']))
-            st.write(province_data.set_index('Province').iloc[:, :1].head(5))
-            
-        with col2:
-            # Plot 1
-            variable0 = "2019-Registered_Voters"
-            vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-            fig, axes = plt.subplots(1,figsize=(7, 8))
-            axes.set_title("2019 Registered Voters (in millions)", size=12)
-            merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
-            sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-            cbar = fig.colorbar(sm1, ax=axes)
-            st.pyplot(fig)
 #             buf = BytesIO()
 #             fig.savefig(buf, format="png")
 #             st.image(buf)
-            
-        # Plot 2
+
+# Plot 2
 #         variable0 = "2019-Total_Voters_Turnout"
 #         vmin0, vmax0 = merged_data["2019-Total_Voters_Turnout"].min(), merged_data["2019-Total_Voters_Turnout"].max()
 #         fig, axes = plt.subplots(1, figsize=(15, 10))
@@ -596,14 +614,14 @@ def profile():
 def conclusions():
     # 6th page - Conclusions and recommendations
     st.title('Conclusions and Recommendations')
-    st.write("The election is more than just a simple popularity game. Though  popular candidates have a head start, it does not"                         " necessarily translate to votes. Election campaigning is a strategic game that combines both machineries and resources"
-             " as well as careful planning and execution to win the votes of the people.")
+    st.write(
+        "The election is more than just a simple popularity game. Though  popular candidates have a head start, it does not"                         " necessarily translate to votes. Election campaigning is a strategic game that combines both machineries and resources"
+        " as well as careful planning and execution to win the votes of the people.")
 
     st.write("As such, here are the factors that candidate should focus on developing a winning campaign strategy.")
     data_sources = Image.open("assets/recommendations.jpg")
     st.image(data_sources)
-    
-    
+
     pass
 
 
