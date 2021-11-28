@@ -20,6 +20,7 @@ import seaborn as sns
 import streamlit as st
 import warnings
 from PIL import Image
+from io import BytesIO
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import Normalizer
@@ -48,7 +49,7 @@ list_of_pages = [
 
 
 # List all functions
-@st.cache(allow_output_mutation=True)
+#@st.cache(allow_output_mutation=True)
 def load_data(option=None):
     if option == "2019-campaigns":
         data = pd.read_csv('JOVES/data/2019-candidate-campaigns.csv')
@@ -71,7 +72,7 @@ def load_data(option=None):
 
 
 def project():
-    st.title("You're a Winner! Formulating Campaign Strategies to Ensure Candidaet Winnability")
+    st.title("You're a Winner! Formulating Campaign Strategies to Ensure Candidate Winnability")
     st.subheader('by Data Science Fellowship Cohort 8 - Group 2')
     st.write('Adrian, Bono, Grace, MaCris, Nico, Sofia (mentored by Aaron)')
 
@@ -167,6 +168,8 @@ def win_loss():
         with col1:
             st.markdown('The Philippines ranked first in internet and social media usage last 2020')
             st.markdown('The average Filipino is on social media for around 3 hours and 50 minutes daily')
+            st.markdown('There is a weak correlation between the number votes and total social media interaction.')
+            st.subheader('Social Media* presence while impactful is not a guarantee to winning votes')
 
         with col2:
             # Load the data
@@ -291,7 +294,7 @@ def win_loss():
                 st.pyplot(fig5)
 
             # Compute correlations of votes and surveys
-            df2.corr()
+            st.table(df2.corr())
 
 
     elif option == 'Contributions':
@@ -337,9 +340,11 @@ def win_loss():
 
             # Generate box plots
             fig = plt.figure(figsize=(12, 8), dpi=150)
+            my_pal = {"Win": "#1f77b4", "Lose": "orange"}
             sns.boxplot(y=melted_df1['variable'],
                         x=melted_df1['value'],
-                        hue=melted_df1['Win Category'])
+                        hue=melted_df1['Win Category'],
+                        palette=my_pal)
 
             plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
             plt.legend(loc = 'lower right')
@@ -523,29 +528,32 @@ def profile():
         # Merge shapefile and province data
         merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
 
-        col1, col2 = st.beta_columns([6,10])
-        with col2:
-            # Plot 1
-            variable0 = "2019-Registered_Voters"
-            vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-            fig, axes = plt.subplots(1, figsize=(8, 6))
-            axes.set_title("2019 Registered Voters (in million)", size=18)
-            merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
-            sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-            cbar = fig.colorbar(sm1, ax=axes)
-            st.pyplot(fig)
+        #         with col1:
+        st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
+        st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
+        st.markdown('')
+        st.markdown('')
 
-        with col1:
-            st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
-            st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
-            st.markdown('')
-            st.markdown('')
-            # Get top 5
-            province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
-            province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
-            df = province_data.set_index('Province').head(5)
-            #print(pd.DataFrame(df['2019 Registered Voters (in million)']))
-            st.write(province_data.set_index('Province').iloc[:, :1].head(5))
+#         col1, col2 = st.beta_columns([6,10])
+#         with col2:
+        # Plot 1
+        variable0 = "2019-Registered_Voters"
+        vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
+        fig, axes = plt.subplots(1,figsize=(8, 6))
+        axes.set_title("2019 Registered Voters (in million)", size=12)
+        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
+        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+        cbar = fig.colorbar(sm1, ax=axes)
+        buf = BytesIO()
+        fig.savefig(buf, format="png")
+        st.image(buf)
+
+        # Get top 5
+        province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
+        province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
+        df = province_data.set_index('Province').head(5)
+        #print(pd.DataFrame(df['2019 Registered Voters (in million)']))
+        st.write(province_data.set_index('Province').iloc[:, :1].head(5))
 
         # Plot 2
 #         variable0 = "2019-Total_Voters_Turnout"
@@ -565,7 +573,7 @@ def profile():
 
 def conclusions():
     # 6th page - Conclusions and recommendations
-    st.title('Conclusions and recommendations')
+    st.title('Conclusions and Recommendations')
     st.write("")
     data_sources = Image.open("assets/recommendations.jpg")
     st.image(data_sources)
