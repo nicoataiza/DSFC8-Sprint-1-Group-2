@@ -526,32 +526,34 @@ def profile():
         # Merge shapefile and province data
         merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
 
-        #         with col1:
-        st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
-        st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
-        st.markdown('')
-        st.markdown('')
+                
 
-#         col1, col2 = st.beta_columns([6,10])
-#         with col2:
-        # Plot 1
-        variable0 = "2019-Registered_Voters"
-        vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-        fig, axes = plt.subplots(1,figsize=(8, 6))
-        axes.set_title("2019 Registered Voters (in million)", size=12)
-        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
-        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-        cbar = fig.colorbar(sm1, ax=axes)
-        buf = BytesIO()
-        fig.savefig(buf, format="png")
-        st.image(buf)
+        col1, col2 = st.beta_columns([6,10])
+        with col1:
+            st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
+            st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
+            st.markdown('')
+            st.markdown('')
 
-        # Get top 5
-        province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
-        province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
-        df = province_data.set_index('Province').head(5)
-        #print(pd.DataFrame(df['2019 Registered Voters (in million)']))
-        st.write(province_data.set_index('Province').iloc[:, :1].head(5))
+            # Get top 5
+            province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'}, inplace=True)
+            province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
+            df = province_data.set_index('Province').head(5)
+            #print(pd.DataFrame(df['2019 Registered Voters (in million)']))
+            st.write(province_data.set_index('Province').iloc[:, :1].head(5))
+            
+        with col2:
+            # Plot 1
+            variable0 = "2019-Registered_Voters"
+            vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
+            fig, axes = plt.subplots(1,figsize=(8, 6))
+            axes.set_title("2019 Registered Voters (in million)", size=12)
+            merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
+            sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+            cbar = fig.colorbar(sm1, ax=axes)
+            st.pyplot(fig)
+
+            
 
         # Plot 2
 #         variable0 = "2019-Total_Voters_Turnout"
