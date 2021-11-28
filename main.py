@@ -590,12 +590,12 @@ def references():
     # 7th page - References
     st.title('References')
     st.write(
-        "•   Census-based Population Projections in collaboration with the Inter-Agency Working Group on Population Projections. (2010)."            "[online] Available at: https://psa.gov.ph/sites/default/files/attachments/hsd/pressrelease/Table4_9.pdf.")
+        "•   Census-based Population Projections in collaboration with the Inter-Agency Working Group on Population Projections. (2010)."            " [online] Available at: https://psa.gov.ph/sites/default/files/attachments/hsd/pressrelease/Table4_9.pdf.")
     st.write(
         "•   psa.gov.ph. (n.d.). Philippine Statistics Authority | Republic of the Philippines. [online] Available"
-        "at: https://psa.gov.ph/gender-stat/wmf.")
+        " at: https://psa.gov.ph/gender-stat/wmf.")
     st.write(
-        "•   psa.gov.ph. (n.d.). Highlights of the Philippine Population 2020 Census of Population and Housing (2020 CPH) | Philippine"              "Statistics Authority. [online] Available at: https://psa.gov.ph/content/highlights-philippine-population-2020-census-population-and-housing-2020-cph.")
+        "•   psa.gov.ph. (n.d.). Highlights of the Philippine Population 2020 Census of Population and Housing (2020 CPH) | Philippine"              " Statistics Authority. [online] Available at: https://psa.gov.ph/content/highlights-philippine-population-2020-census-population-and-housing-2020-cph.")
     st.write(
         "•   Chua, K. (2021). PH remains top in social media, internet usage worldwide – report. [online] Rappler. Available at:"                   "https://www.rappler.com/technology/internet-culture/hootsuite-we-are-social-2021-philippines-top-social-media-internet-usage.")
     st.write(
