@@ -502,8 +502,8 @@ def win_loss():
         with col1:
             st.markdown('')
             st.markdown(
-                'As we can see from the table below, Cluster 1 which has the most spending' 
-                'out of all the clusters has the highest rate of winning' 
+                'As we can see from the table below, the cluster with the highest expenditure of PHP 72.7 million' 
+                ' also has the highest rate of winning which is at 42.31%' 
             )
             
             st.markdown('')
@@ -545,7 +545,7 @@ def win_loss():
                 sns.barplot(
                     x="Cluster Labels",
                     y=column,
-                    hue=column,
+                    hue="Cluster Labels",
                     data=df_cluster,
                     dodge=False
                 )
