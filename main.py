@@ -315,9 +315,9 @@ def win_loss():
 
         col1, col2 = st.beta_columns([5,11])
         with col1:
-            st.markdown('Winners have received significant contributions both in Cash and In-Kind.')
+            st.markdown('Winners have received significant contributions both in cash and in-Kind.')
             st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
-            st.markdown('Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate')
+            st.markdown('Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate.')
             
         with col2:
             # Clean the data
@@ -354,7 +354,7 @@ def win_loss():
             st.pyplot(fig)
 
     elif option == 'Expenditures':
-        st.subheader('Intial Analysis on Expenditures by Item')
+        st.subheader('Initial Analysis on Expenditures by Item')
         st.markdown('')
         st.markdown('')
         
@@ -467,7 +467,7 @@ def win_loss():
             y_sil = [x[1] for x in sil]
             ax[1].plot(x_sil, y_sil)
             ax[1].set_xlabel('Number of Clusters')
-            ax[1].set_ylabel('Silhouetter Score')
+            ax[1].set_ylabel('Silhouette Score')
             ax[1].set_title('Silhouette Score Curve')
             
             st.pyplot(fig)
@@ -531,7 +531,7 @@ def profile():
         col1, col2 = st.beta_columns([8,9])
         with col1:
             st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
-            st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
+            st.markdown('The same provinces is also the top 3 Provinces in terms population count')
             st.markdown('')
             st.markdown('')
 
