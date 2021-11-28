@@ -21,6 +21,7 @@ import streamlit as st
 import warnings
 from PIL import Image
 from io import BytesIO
+import squarify
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import Normalizer
@@ -556,79 +557,99 @@ def win_loss():
 
 
 def profile():
-    # option = st.selectbox('Voter Pofile by:', ['Age Range', 'Registered Voters'])
+    option = st.selectbox('Voter Pofile by:', ['Age Range', 'Registered Voters'])
 
-    # if option == 'Age Range':
-    #    st.markdown('')
+    if option == 'Age Range':
+        st.header("Age Range of Registered Voters in 2016")
+        # Data Wrangling
+        voter = load_data(option="2016-2019-voters")
+        voter = voter[['2016-Registered_17-19', '2016-Registered_20-24',
+       '2016-Registered_25-29', '2016-Registered_30-34',
+       '2016-Registered_35-39', '2016-Registered_40-44',
+       '2016-Registered_45-49', '2016-Registered_50-54',
+       '2016-Registered_55-59', '2016-Registered_60-64',
+       '2016-Registered_65-Above']]
+        df1 = pd.DataFrame(voter.sum())
+        df1 = df1.reset_index()
+        df1.rename(columns={0:"Votes"},inplace=True)
 
-    # elif option == 'Registered Voters':
+        #tree map
+        plt.figure(figsize=(16,8))
+        perc = [f'{i/df1["Votes"].sum()*100:5.2f}%' for i in df1['Votes']]
+        lbl = [f'{el[0][-5:]} = {el[1]}' if el[0][-5:]!= "Above" else f"65-Above = {el[1]}" for el in zip(df1['index'], perc)]
+        squarify.plot(sizes=df1["Votes"], label=lbl, alpha=.8,linewidth=2.5)
+        plt.axis("off")
+        sns.set(font_scale=2.5)
+        #plt.title("Age Distribution of Registered Voters in 2016",fontsize=36)
+        st.pyplot(plt)
+    elif option == 'Registered Voters':
 
-    st.header("Voter Profile by Registered Voters")
-    # Read shapefile
-    shapefile = load_data(option="provinces")
-    shapefile["x"] = shapefile.geometry.centroid.x
-    shapefile["y"] = shapefile.geometry.centroid.y
+        st.header("Voter Profile by Registered Voters")
+        # Read shapefile
+        shapefile = load_data(option="provinces")
+        shapefile["x"] = shapefile.geometry.centroid.x
+        shapefile["y"] = shapefile.geometry.centroid.y
 
-    # Read csv
-    voter = load_data(option="2016-2019-voters")
+        # Read csv
+        voter = load_data(option="2016-2019-voters")
 
-    # Wrangle the data
-    province = {}
-    for i in voter["Province"].unique():
-        s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
-        if len(s_province) == 1:
-            province[i] = s_province[0]
-        else:
-            province[i] = 'INPUT'
+        # Wrangle the data
+        province = {}
+        for i in voter["Province"].unique():
+            s_province = [x for x in shapefile["PROVINCE"].unique() if i == x.upper()]
+            if len(s_province) == 1:
+                province[i] = s_province[0]
+            else:
+                province[i] = 'INPUT'
 
-    # Manually insert province
-    province['NCR'] = 'Metropolitan Manila'
-    province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
+        # Manually insert province
+        province['NCR'] = 'Metropolitan Manila'
+        province['DAVAO OCCIDENTAL'] = 'Shariff Kabunsuan'
 
-    # Replace province name
-    voter["Province"] = voter["Province"].replace(province)
+        # Replace province name
+        voter["Province"] = voter["Province"].replace(province)
 
-    # Drop unnecessary columns
-    voter = voter.loc[:,
-            ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
+        # Drop unnecessary columns
+        voter = voter.loc[:,
+                ['Region', 'Province', 'Municipality', '2019-Registered_Voters', '2019-Total_Voters_Turnout']]
 
-    # Get sum per province
-    province_data = voter.groupby(
-        "Province"
-    ).agg(
-        {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
-    ).reset_index()
-    province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
+        # Get sum per province
+        province_data = voter.groupby(
+            "Province"
+        ).agg(
+            {'2019-Registered_Voters': 'sum', '2019-Total_Voters_Turnout': 'mean'}
+        ).reset_index()
+        province_data['2019-Registered_Voters'] = province_data['2019-Registered_Voters'] / 1000000
 
-    # Merge shapefile and province data
-    merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
+        # Merge shapefile and province data
+        merged_data = pd.merge(shapefile, province_data, left_on='PROVINCE', right_on='Province')
 
-    col1, col2 = st.beta_columns([8, 9])
-    with col1:
-        st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
-        st.markdown('The same provinces is also the top 3 Provinces in terms population count')
-        st.markdown('')
-        st.markdown('')
+        col1, col2 = st.beta_columns([8, 9])
+        with col1:
+            st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
+            st.markdown('The same provinces is also the top 3 Provinces in terms population count')
+            st.markdown('')
+            st.markdown('')
 
-        # Get top 5
-        province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'},
-                             inplace=True)
-        province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
-        df = province_data.set_index('Province').head(5)
-        # print(pd.DataFrame(df['2019 Registered Voters (in million)']))
-        st.write(province_data.set_index('Province').iloc[:, :1].head(5))
+            # Get top 5
+            province_data.rename(columns={'2019-Registered_Voters': '2019 Registered Voters (in million)'},
+                                inplace=True)
+            province_data.sort_values(by='2019 Registered Voters (in million)', ascending=False, inplace=True)
+            df = province_data.set_index('Province').head(5)
+            # print(pd.DataFrame(df['2019 Registered Voters (in million)']))
+            st.write(province_data.set_index('Province').iloc[:, :1].head(5))
 
-    with col2:
-        # Plot 1
-        variable0 = "2019-Registered_Voters"
-        vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-        fig, axes = plt.subplots(1, figsize=(7, 8))
-        axes.set_title("2019 Registered Voters (in millions)", size=12)
-        merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0,
-                         vmax=vmax0)
-        sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
-        cbar = fig.colorbar(sm1, ax=axes)
-        st.pyplot(fig)
+        with col2:
+            # Plot 1
+            variable0 = "2019-Registered_Voters"
+            vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
+            fig, axes = plt.subplots(1, figsize=(7, 8))
+            axes.set_title("2019 Registered Voters (in millions)", size=12)
+            merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0,
+                            vmax=vmax0)
+            sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
+            cbar = fig.colorbar(sm1, ax=axes)
+            st.pyplot(fig)
 
 
 #             buf = BytesIO()
