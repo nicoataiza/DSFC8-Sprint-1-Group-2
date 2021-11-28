@@ -222,73 +222,79 @@ def win_loss():
             st.pyplot(fig)
 
     elif option == 'Electoral Surveys':
-        st.write("")
+        
         st.subheader("It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
-        st.write("")
         
-        # Compute correlations of votes and surveys
-        df_raw = load_data(option="2019-surveys")
-        st.table(df_raw.corr())
-        
-        option = st.selectbox(
-            'Select Date:',
-            ['Jan 26-31, 2019', 'Feb 24-28, 2019', 'Mar 23-27, 2019', 'Apr 10-14, 2019', 'May 3-6, 2019'])
-
         # Load the data
-        df2 = load_data(option="2019-surveys")  
-
-        # Generate mapping function
-        def win_category(x):
-            if x == 1:
-                return 'Win'
-            else:
-                return 'Lose'
-
-        # Map function: 1 to Win and 0 to Lose
-        df2['Win Category'] = df2['Win'].apply(lambda x: win_category(x))
-
-        # Plot scatter plots of electoral surveys vs votes
-        if option == "Jan 26-31, 2019":
-            fig1 = plt.figure(figsize=(10, 6))
-            sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Jan 26-31)", data=df2, hue="Win Category")
-            plt.title("Electoral Survey (Jan 26-31, 2019) vs Actual Votes", fontsize=20)
-            plt.xlabel("Actual Votes")
-            plt.ylabel("Electoral Survey %")
-            st.pyplot(fig1)
-
-        elif option == "Feb 24-28, 2019":
-            fig2 = plt.figure(figsize=(10, 6))
-            sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Feb 24-28)", data=df2, hue="Win Category")
-            plt.title("Electoral Survey (Feb 24-28, 2019) vs Actual Votes", fontsize=20)
-            plt.xlabel("Actual Votes")
-            plt.ylabel("Electoral Survey %")
-            st.pyplot(fig2)
-
-        elif option == "Mar 23-27, 2019":
-            fig3 = plt.figure(figsize=(10, 6))
-            sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Mar 23-27)", data=df2, hue="Win Category")
-            plt.title("Electoral Survey (Mar 23-27, 2019) vs Actual Votes", fontsize=20)
-            plt.xlabel("Actual Votes")
-            plt.ylabel("Electoral Survey %")
-            st.pyplot(fig3)
-
-        elif option == "Apr 10-14, 2019":
-            fig4 = plt.figure(figsize=(10, 6))
-            sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Apr 10-14)", data=df2, hue="Win Category")
-            plt.title("Electoral Survey (Apr 10-14, 2019) vs Actual Votes", fontsize=20)
-            plt.xlabel("Actual Votes")
-            plt.ylabel("Electoral Survey %")
-            st.pyplot(fig4)
-
-        elif option == "May 3-6, 2019":
-            fig5 = plt.figure(figsize=(10, 6))
-            sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (May 3-6)", data=df2, hue="Win Category")
-            plt.title("Electoral Survey (May 3-6, 2019) vs Actual Votes", fontsize=20)
-            plt.xlabel("Actual Votes")
-            plt.ylabel("Electoral Survey %")
-            st.pyplot(fig5)
-
+        df2 = load_data(option="2019-surveys")
         
+        col1, col2 = st.beta_columns([10,10])
+        with col1:
+            st.markdown('')
+            st.markdown('')
+            # Compute correlations of votes and surveys
+            votes = df2.iloc[:,4:5]
+            pulse = df2.iloc[:, 6:11]
+            df_cor = pd.concat([votes,pulse], axis=1)
+            st.table(df_cor.corr())
+
+        with col2:
+            option = st.selectbox(
+                'Select Date:',
+                ['Jan 26-31, 2019', 'Feb 24-28, 2019', 'Mar 23-27, 2019', 'Apr 10-14, 2019', 'May 3-6, 2019'])
+        
+            # Generate mapping function
+            def win_category(x):
+                if x == 1:
+                    return 'Win'
+                else:
+                    return 'Lose'
+
+            # Map function: 1 to Win and 0 to Lose
+            df2['Win Category'] = df2['Win'].apply(lambda x: win_category(x))
+
+            # Plot scatter plots of electoral surveys vs votes
+            if option == "Jan 26-31, 2019":
+                fig1 = plt.figure(figsize=(10, 6))
+                sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Jan 26-31)", data=df2, hue="Win Category")
+                plt.title("Electoral Survey (Jan 26-31, 2019) vs Actual Votes", fontsize=20)
+                plt.xlabel("Actual Votes")
+                plt.ylabel("Electoral Survey %")
+                st.pyplot(fig1)
+
+            elif option == "Feb 24-28, 2019":
+                fig2 = plt.figure(figsize=(10, 6))
+                sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Feb 24-28)", data=df2, hue="Win Category")
+                plt.title("Electoral Survey (Feb 24-28, 2019) vs Actual Votes", fontsize=20)
+                plt.xlabel("Actual Votes")
+                plt.ylabel("Electoral Survey %")
+                st.pyplot(fig2)
+
+            elif option == "Mar 23-27, 2019":
+                fig3 = plt.figure(figsize=(10, 6))
+                sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Mar 23-27)", data=df2, hue="Win Category")
+                plt.title("Electoral Survey (Mar 23-27, 2019) vs Actual Votes", fontsize=20)
+                plt.xlabel("Actual Votes")
+                plt.ylabel("Electoral Survey %")
+                st.pyplot(fig3)
+
+            elif option == "Apr 10-14, 2019":
+                fig4 = plt.figure(figsize=(10, 6))
+                sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (Apr 10-14)", data=df2, hue="Win Category")
+                plt.title("Electoral Survey (Apr 10-14, 2019) vs Actual Votes", fontsize=20)
+                plt.xlabel("Actual Votes")
+                plt.ylabel("Electoral Survey %")
+                st.pyplot(fig4)
+                
+            elif option == "May 3-6, 2019":
+                fig5 = plt.figure(figsize=(10, 6))
+                sns.scatterplot(x="Votes", y="PulseAsia Survey 2019 (May 3-6)", data=df2, hue="Win Category")
+                plt.title("Electoral Survey (May 3-6, 2019) vs Actual Votes", fontsize=20)
+                plt.xlabel("Actual Votes")
+                plt.ylabel("Electoral Survey %")
+                st.pyplot(fig5)
+
+            
 
 
     elif option == 'Contributions':
@@ -340,7 +346,7 @@ def win_loss():
                         hue=melted_df1['Win Category'],
                         palette=my_pal)
 
-            plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
+            #plt.title('Boxplot of Contributions Received - Winners vs. Losers', fontsize=20)
             plt.legend(loc = 'lower right')
             plt.ylabel('Contribution Sources', fontsize=12)
             plt.xlabel('Amount of Contributions Received', fontsize=12)
@@ -389,7 +395,7 @@ def win_loss():
                         x=melted_df1['value'],
                         hue=melted_df1['Win Category'])
 
-            plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
+            #plt.title('Boxplots of Individual Expenditure Item of Winners vs Losers', fontsize=20)
             plt.ylabel('', fontsize=40)
             plt.xlabel('Expenditure Amount', fontsize=15)
             plt.xticks(fontsize=12)
