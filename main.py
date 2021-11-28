@@ -528,7 +528,7 @@ def profile():
 
                 
 
-        col1, col2 = st.beta_columns([6,10])
+        col1, col2 = st.beta_columns([8,9])
         with col1:
             st.subheader('Manila, Cebu and Cavite have the highest registered voters.')
             st.markdown('The same Provinces is also the top 3 Provinces in terms Population count')
@@ -546,15 +546,16 @@ def profile():
             # Plot 1
             variable0 = "2019-Registered_Voters"
             vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-            fig, axes = plt.subplots(1,figsize=(8, 6))
-            axes.set_title("2019 Registered Voters (in million)", size=12)
+            fig, axes = plt.subplots(1,figsize=(7, 8))
+            axes.set_title("2019 Registered Voters (in millions)", size=12)
             merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
             sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
             cbar = fig.colorbar(sm1, ax=axes)
             st.pyplot(fig)
-
+#             buf = BytesIO()
+#             fig.savefig(buf, format="png")
+#             st.image(buf)
             
-
         # Plot 2
 #         variable0 = "2019-Total_Voters_Turnout"
 #         vmin0, vmax0 = merged_data["2019-Total_Voters_Turnout"].min(), merged_data["2019-Total_Voters_Turnout"].max()
