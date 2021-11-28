@@ -319,7 +319,9 @@ def win_loss():
             st.markdown('Winners have received significant contributions both in cash and in-Kind.')
             st.markdown('This could mean that they have enough resources to fund for all their expenditures.')
             st.markdown(
-                'Thus, enabling them to have more opportunities to in terms of their campaign spending and as we have seen from Expenditure analysis has impacted the winnability of a candidate.')
+                'Thus, enabling them to have more opportunities to in terms of their campaign spending'
+                'and as we have seen from Expenditure analysis has impacted the winnability of a candidate.'
+            )
 
         with col2:
             # Clean the data
@@ -364,7 +366,9 @@ def win_loss():
         with col1:
             st.markdown('Winners significantly spent on political ads vs those who lost the election.')
             st.markdown(
-                'Other expenses of winning candidates are travel expenses, compensation of campaigners, and below-the-line materials vs those who lost the election.')
+                'Other expenses of winning candidates are travel expenses, compensation of campaigners,'
+                'and below-the-line materials vs those who lost the election.'
+            )
 
         with col2:
             # Generate box plots of expenditures
@@ -405,13 +409,14 @@ def win_loss():
         # Expenditures Clustering
         st.write('\n')
         st.markdown('')
-        st.subheader('Now we try to cluster Candidates based on their Expenditures.')
+        st.subheader('Now we try to cluster candidates based on their expenditures.')
         st.markdown('')
 
         col1, col2 = st.beta_columns([11, 5])
         with col1:
             # Load the data
             df_cluster = load_data(option="2019-campaigns-v3")
+            df1 = df_cluster
 
             # Fill nulls
             df_cluster = df_cluster.fillna(0)
@@ -477,6 +482,38 @@ def win_loss():
             st.markdown('We determine the best number of clusters by finding the inertia and silhouette score')
             st.markdown('Using the Elbow Method, we have identified that the optimal number of clusters is 3.')
 
+        st.markdown('')
+        st.markdown('')
+        st.subheader("After implementing clustering, we profiled the clusters based on their individual expenses.")
+        
+        kmeans = KMeans(n_clusters=3)
+        kmeans.fit(X)
+        labels = kmeans.predict(X)
+        
+        #set cluster Labels as index
+        df_temp = df_cluster
+        df_temp["Win"] = df1.loc[:, "Win"]
+        df_temp['Cluster'] = labels
+        df_temp = df_temp.set_index('Cluster')
+        df_temp = df_temp.groupby("Cluster").mean().reset_index()
+        
+        col1, col2 = st.beta_columns([5,11])
+        #generate summary table
+        with col1:
+            st.markdown('')
+            st.markdown(
+                'As we can see from the table below, Cluster 1 which has the most spending' 
+                'out of all the clusters has the highest rate of winning' 
+            )
+            
+            st.markdown('')
+            df_temp['Total Expenditure'] = df_temp.sum(axis=1)
+            df_temp = df_temp[["Cluster","Total Expenditure", "Win"]]
+            st.write(df_temp)
+            
+            st.markdown('')
+            st.markdown('Thus, it can be said that higher expenditure corresponds to higher chances of winning')
+            
         # Regenerate k-Means clustering
         kmeans = KMeans(n_clusters=3)
         kmeans.fit(X)
@@ -496,12 +533,15 @@ def win_loss():
         df_cluster = df_cluster.groupby("Cluster Labels").mean().reset_index()
 
         # Profile each cluster
-        st.subheader("After implementing clustering, we profiled the clusters based on their individual expenses: ")
-        for column in df_cluster.columns:
+        with col2:
+            st.markdown('')
+            column = st.selectbox('Choose an expenditure item:', feature_cols)
+
+            #for column in df_cluster.columns:
             if column == "index" or column == "Cluster Labels":
                 pass
             else:
-                fig, ax = plt.subplots(1, 1)
+                fig, ax = plt.subplots(1, 1, figsize=(12, 8), dpi=150)
                 sns.barplot(
                     x="Cluster Labels",
                     y=column,
