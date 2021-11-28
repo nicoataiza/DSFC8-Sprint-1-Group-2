@@ -1,4 +1,4 @@
-import descartes
+#import descartes
 import geopandas as gpd
 import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -477,9 +477,30 @@ def win_loss():
             st.markdown('Using the Elbow Method, we have identifed that the optimal number of clusters is 3.')
 
             #table summary of clusters and win rate
-
+        kmeans = KMeans(n_clusters=3)
+        kmeans.fit(X)
+        labels = kmeans.predict(X)
+        feature_cols = ['Travel Expenses','Compensation of campaigners, etc.', 'Communications','Stationery, Printing, and Distribution','Employment of Poll Watchers','Rent, Maintenance, etc.', 'Political Meetings and Rallies', 'Pol Ads']
+        df_cluster = df_cluster[feature_cols]
+            #set cluster Labels as index
+        df_cluster['Cluster Labels'] = labels
+        df_cluster= df_cluster.groupby("Cluster Labels").mean().reset_index()    
+        
             #subplots of the bar plots per expenditure items
-
+        for column in df_cluster.columns:
+                  if column == "index" or column == "Cluster Labels":
+                    pass
+                  else:
+                    fig, ax =plt.subplots(1,1)
+                    sns.barplot(
+                        x="Cluster Labels", 
+                        y=column, 
+                        hue=column, 
+                        data=df_cluster,
+                        dodge=False
+                        )
+                    st.pyplot(fig)    
+        st.markdown('We can say that higher expenses result to high chances of winning')
 
 def profile():
     option = st.selectbox('Voter Pofile by:', ['Age Range','Registered Voters'])
