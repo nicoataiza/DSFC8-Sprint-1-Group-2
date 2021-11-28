@@ -138,11 +138,11 @@ def data_method():
         #st.image(methodology)
     
     st.write("")
-    data_sources = Image.open("assets/Data Source.JPG")
+    data_sources = Image.open("assets/Data Source.jpg")
     st.image(data_sources)
 
     st.write("")
-    methodology = Image.open("assets/Methodology3.JPG")
+    methodology = Image.open("assets/Methodology3.jpg")
     st.image(methodology)
     
     
@@ -528,7 +528,7 @@ def profile():
             # Plot 1
             variable0 = "2019-Registered_Voters"
             vmin0, vmax0 = merged_data["2019-Registered_Voters"].min(), merged_data["2019-Registered_Voters"].max()
-            fig, axes = plt.subplots(1, figsize=(15, 10))
+            fig, axes = plt.subplots(1, figsize=(8, 6))
             axes.set_title("2019 Registered Voters (in million)", size=18)
             merged_data.plot(column=variable0, cmap='OrRd', linewidth=0.8, ax=axes, edgecolor='0.8', vmin=vmin0, vmax=vmax0)
             sm1 = plt.cm.ScalarMappable(cmap='OrRd', norm=plt.Normalize(vmin=vmin0, vmax=vmax0))
