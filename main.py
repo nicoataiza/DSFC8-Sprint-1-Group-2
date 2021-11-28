@@ -230,8 +230,6 @@ def win_loss():
         
         col1, col2 = st.beta_columns([10,10])
         with col1:
-            st.markdown('')
-            st.markdown('')
             # Compute correlations of votes and surveys
             votes = df2.iloc[:,4:5]
             pulse = df2.iloc[:, 6:11]
