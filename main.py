@@ -232,7 +232,7 @@ def win_loss():
         # Load the data
     df2 = load_data(option="2019-surveys")
 
-        col1, col2 = st.beta_columns([10, 10])
+    col1, col2 = st.beta_columns([10, 10])
         with col1:
             # Compute correlations of votes and surveys
             votes = df2.iloc[:, 4:5]
