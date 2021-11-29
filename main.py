@@ -680,6 +680,14 @@ def conclusions():
         " as well as careful planning and execution to win the votes of the people.")
 
     st.write("As such, here are the factors that candidate should focus on developing a winning campaign strategy.")
+    st.write(
+        "**SOCIAL MEDIA.**  Investing in social media does not necessarily equate to winning. Candidates must not focus on this aspect only.")
+    st.write(
+        "**POLL.** Candidates must listen to survey and adjust their strategy as necessary.")
+    st.write(
+        "**MONEY.** Since money fuels campaign and has significant impact on the election result, candidate must take into consideration their financial capacity.")
+    st.write(
+        "**TARGET.** Age and areas must be considered for strategizing their campaign.")
     data_sources = Image.open("assets/recommendations.jpg")
     st.image(data_sources)
 
