@@ -581,7 +581,6 @@ def profile():
         lbl = [f'{el[0][-5:]} = {el[1]}' if el[0][-5:]!= "Above" else f"65-Above = {el[1]}" for el in zip(df1['index'], perc)]
         squarify.plot(sizes=df1["Votes"], label=lbl, alpha=.8,linewidth=2.5)
         plt.axis("off")
-        sns.set(font_scale=2.5)
         #plt.title("Age Distribution of Registered Voters in 2016",fontsize=36)
         st.pyplot(plt)
     
