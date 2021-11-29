@@ -297,8 +297,6 @@ def win_loss():
                 st.pyplot(fig5)
 
 
-
-
     elif option == 'Contributions':
         # Load the data
         df_raw = load_data(option="2019-campaigns-v2")
