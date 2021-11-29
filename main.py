@@ -223,26 +223,26 @@ def win_loss():
             st.pyplot(fig)
 
     elif option == 'Electoral Surveys':
+        
+        st.markdown('Social media presence (FB/Twitter) might not reflect the trend of the actual votes but the electoral surveys do.')
+        st.markdown('The cut between winners and losers became clearer, with almost perfect correlation a week before the election')
+        st.subheader('It is wise for the candidates to track their survey results as it is highly correlated with actual votes.')
 
-            st.markdown('Social media presence (FB/Twitter) might not reflect the trend of the actual votes but the electoral surveys do.')
-            st.markdown('The cut between winners and losers became clearer, with almost perfect correlation a week before the election')
-            st.subheader('It is wise for the candidates to track their survey results as it is highly correlated with actual votes.')
-            
         # Load the data
-    df2 = load_data(option="2019-surveys")
+        df2 = load_data(option="2019-surveys")
 
-    col1, col2 = st.beta_columns([10, 10])
-    with col1:
+        col1, col2 = st.beta_columns([10, 10])
+        with col1:
             # Compute correlations of votes and surveys
             votes = df2.iloc[:, 4:5]
             pulse = df2.iloc[:, 6:11]
             df_cor = pd.concat([votes, pulse], axis=1)
             st.table(df_cor.corr())
 
-    with col2:
+        with col2:
             option = st.selectbox(
-                'Select Date:',
-                ['Jan 26-31, 2019', 'Feb 24-28, 2019', 'Mar 23-27, 2019', 'Apr 10-14, 2019', 'May 3-6, 2019'])
+            'Select Date:',
+            ['Jan 26-31, 2019', 'Feb 24-28, 2019', 'Mar 23-27, 2019', 'Apr 10-14, 2019', 'May 3-6, 2019'])
 
             # Generate mapping function
             def win_category(x):
