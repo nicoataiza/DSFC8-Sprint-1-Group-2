@@ -226,8 +226,7 @@ def win_loss():
 
             st.markdown('Social media presence (FB/Twitter) might not reflect the trend of the actual votes but the electoral surveys do.')
             st.markdown('The cut between winners and losers became clearer, with almost perfect correlation a week before the election')
-            st.subheader("It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
-            
+            st.subheader('It is wise for the candidates to track their survey results as it is highly correlated with actual votes.')
             
         # Load the data
     df2 = load_data(option="2019-surveys")
