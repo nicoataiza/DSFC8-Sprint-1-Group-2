@@ -224,9 +224,12 @@ def win_loss():
 
     elif option == 'Electoral Surveys':
 
-        st.subheader(
-            "It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
-
+       
+            st.markdown('Social media presence (FB/Twitter) might not reflect the trend of the actual votes but the electoral surveys do.')
+            st.markdown('The cut between winners and losers became clearer, with almost perfect correlation a week before the election')
+            st.subheader("It is wise for the candidates to track their survey results as it is highly correlated with actual votes.")
+            
+            
         # Load the data
         df2 = load_data(option="2019-surveys")
 
@@ -573,6 +576,9 @@ def profile():
         df1 = df1.reset_index()
         df1.rename(columns={0:"Votes"},inplace=True)
 
+        st.subheader(
+            'In terms of age group, productive range to target is between 20 to 49, as it comprises 68% of the total voting population.')
+        
         #tree map
         plt.figure(figsize=(16,8))
         perc = [f'{i/df1["Votes"].sum()*100:5.2f}%' for i in df1['Votes']]
@@ -582,6 +588,7 @@ def profile():
         sns.set(font_scale=2.5)
         #plt.title("Age Distribution of Registered Voters in 2016",fontsize=36)
         st.pyplot(plt)
+    
     elif option == 'Registered Voters':
 
         st.header("Voter Profile by Registered Voters")
